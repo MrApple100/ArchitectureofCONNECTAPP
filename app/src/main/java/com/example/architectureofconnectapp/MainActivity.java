@@ -115,9 +115,8 @@ public class MainActivity extends AppCompatActivity {
                 MySourceFactory mySourceFactory = new MySourceFactory(connectNewsFeed,vkProcessRequest);
                 PagedList.Config config = new PagedList.Config.Builder()
                         .setEnablePlaceholders(false)
-                        .setInitialLoadSizeHint(4)
-                        .setPrefetchDistance(2)
-                        .setPageSize(5)
+                        .setPrefetchDistance(5)
+                        .setPageSize(10)
                         .build();
                 pagedListData =new LivePagedListBuilder<>(mySourceFactory,config)
                         .setFetchExecutor(Executors.newSingleThreadExecutor())

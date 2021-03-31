@@ -39,11 +39,14 @@ public class AdapterConnectNewsFeed extends PagedListAdapter<ConnectPost, Adapte
         if(settingView.getText()){
             holder.Text.setVisibility(View.VISIBLE);
             holder.Text.setText(connectPost.getText());
+        }else{
+            holder.Text.setVisibility(View.GONE);
         }
         if(connectPost.Picture.size()!=0) {
             holder.Picture.setVisibility(View.VISIBLE);
-            System.out.println(connectPost.getPicture().get(0));
             holder.Picture.setImageBitmap(connectPost.getPicture().get(0));
+        }else{
+            holder.Picture.setVisibility(View.GONE);
         }
         if(settingView.getLike()){
 

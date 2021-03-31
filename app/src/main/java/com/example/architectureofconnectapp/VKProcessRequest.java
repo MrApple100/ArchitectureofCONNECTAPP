@@ -15,7 +15,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class VKProcessRequest implements IProcessNetRequest{
-
+    String next_fromtemp="0";
     @Override
     public ArrayList<ConnectPost> makenextrequest(int count,String next_from) {
         checkNotMain();
@@ -30,6 +30,7 @@ public class VKProcessRequest implements IProcessNetRequest{
                 //получаем Connect посты
                 try {
                     JSONObject jsonresponce = (JSONObject) response.json.get("response");
+                    next_fromtemp=jsonresponce.getString("next_from");
                     JSONArray jsonitems = (JSONArray) jsonresponce.get("items");
                     for (int i = 0; i < jsonitems.length(); i++) {
                         JSONObject jsonitem = (JSONObject) jsonitems.get(i);
@@ -45,6 +46,11 @@ public class VKProcessRequest implements IProcessNetRequest{
 
         return connectPosts;
     }
+
+    public String sentNext_from() {
+        return next_fromtemp;
+    }
+
     static void checkNotMain() {
         if (isMain()) {
             throw new IllegalStateException("VKProcessRequest/Method call should not happen from the main thread.");

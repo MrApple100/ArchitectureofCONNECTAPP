@@ -29,8 +29,9 @@ public class ConnectNewsFeed {
         Count = count;
     }
     public void setPosts(IProcessNetRequest iProcessNetRequest) {
-            List<ConnectPost> gettedposts= iProcessNetRequest.makenextrequest(Count,next_from);
-            posts.addAll(gettedposts);
-            next_from+=Count;
+            posts = iProcessNetRequest.makenextrequest(Count,next_from);
+
+            //posts.addAll(gettedposts);
+            next_from=iProcessNetRequest.sentNext_from();
     }
 }
