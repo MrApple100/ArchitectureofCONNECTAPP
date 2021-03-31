@@ -15,13 +15,15 @@ public abstract class IPostfromNet {
     }
 
     protected String text;
-    protected ArrayList<Bitmap> Picture;
-    protected ArrayList<MediaStore.Video> Video;
-    protected ArrayList<MediaStore.Audio> Audio;
+    protected ArrayList<Bitmap> Picture=new ArrayList<>();
+    protected ArrayList<MediaStore.Video> Video=new ArrayList<>();
+    protected ArrayList<MediaStore.Audio> Audio=new ArrayList<>();
     protected JSONObject NetPostJsonInfo;
     protected int like=0;
     protected int repost=0;
     protected int comments=0;
+    protected int views=0;
+
 
     abstract String getNameNet();
 
@@ -55,5 +57,8 @@ public abstract class IPostfromNet {
 
     public int getComments() {
         return comments;
+    }
+    public int getViews() {
+        return views;
     }
 }

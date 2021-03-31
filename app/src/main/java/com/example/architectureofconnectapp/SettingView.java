@@ -8,6 +8,8 @@ public class SettingView {
     private Boolean like=false;
     private Boolean repost=false;
     private Boolean comment=false;
+    private Boolean views=false;
+
 
     public Boolean getText() {
         return text;
@@ -37,6 +39,10 @@ public class SettingView {
         return comment;
     }
 
+    public Boolean getViews() {
+        return views;
+    }
+
     public void setText(Boolean text) {
         this.text = text;
     }
@@ -63,5 +69,9 @@ public class SettingView {
 
     public void setComment(Boolean comment) {
         this.comment = comment;
+    }
+
+    public void setViews(Boolean views) {
+        this.views = views;
     }
 }

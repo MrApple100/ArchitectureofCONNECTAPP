@@ -40,7 +40,7 @@ public class VKgetFromJson implements INetFromJson{
         try {
             if (json.has("attachments")) {
                 JSONArray jsonarrayattachments = (JSONArray) json.get("attachments");
-                for(int j=0;j<jsonarrayattachments.length();j++) {
+                for(int j=0;j<jsonarrayattachments.length();j++) { ;
                     JSONObject jsonObject2 = (JSONObject) jsonarrayattachments.get(j);
                     if(jsonObject2.getString("type").equals("photo")) {
                         JSONObject jsonObject3 = (JSONObject) jsonObject2.get("photo");
@@ -60,7 +60,6 @@ public class VKgetFromJson implements INetFromJson{
                         Log.e("Error","Bitmap/transform");
                     }
                 }
-
         return bitmaps;
     }
     public ArrayList<MediaStore.Video> Video(JSONObject json){
@@ -83,7 +82,7 @@ public class VKgetFromJson implements INetFromJson{
     public int like(JSONObject json) {
         int likes=0;
         try {
-            likes = json.getInt("likes");
+            likes = ((JSONObject)json.get("likes")).getInt("count");
         }catch (JSONException jsonException){
             Log.e("Error","IntLike");
         }
@@ -94,7 +93,7 @@ public class VKgetFromJson implements INetFromJson{
     public int repost(JSONObject json) {
         int reposts=0;
         try {
-            reposts = json.getInt("reposts");
+            reposts = ((JSONObject)json.get("reposts")).getInt("count");
         }catch (JSONException jsonException){
             Log.e("Error","Intreports");
         }
@@ -105,7 +104,7 @@ public class VKgetFromJson implements INetFromJson{
     public int comments(JSONObject json) {
         int comments=0;
         try {
-            comments = json.getInt("comments");
+            comments = ((JSONObject)json.get("comments")).getInt("count");
         }catch (JSONException jsonException){
             Log.e("Error","IntComments");
         }
@@ -116,7 +115,8 @@ public class VKgetFromJson implements INetFromJson{
     public int views(JSONObject json) {
         int views=0;
         try {
-            views = json.getInt("views");
+
+            views = ((JSONObject)json.get("views")).getInt("count");
         }catch (JSONException jsonException){
             Log.e("Error","Intviews");
         }

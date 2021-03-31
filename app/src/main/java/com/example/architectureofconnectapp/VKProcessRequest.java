@@ -1,5 +1,6 @@
 package com.example.architectureofconnectapp;
 
+import android.os.Looper;
 import android.util.Log;
 
 import com.vk.sdk.api.VKApiConst;
@@ -16,10 +17,13 @@ import java.util.ArrayList;
 public class VKProcessRequest implements IProcessNetRequest{
 
     @Override
-    public ArrayList<ConnectPost> makenextrequest(int count,String next_from)throws IllegalThreadStateException {
+    public ArrayList<ConnectPost> makenextrequest(int count,String next_from) {
+        checkNotMain();
         ArrayList<ConnectPost> connectPosts=new ArrayList<>();
+
         VKRequest vkRequest =new VKRequest("newsfeed.get", VKParameters.from(VKApiConst.COUNT,count,"start_from",next_from,VKApiConst.FILTERS,"post,photos,notes,friends"));
-        vkRequest.executeWithListener(new VKRequest.VKRequestListener() {
+        System.out.println("REQUEST:"+vkRequest.context);
+        vkRequest.executeSyncWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
@@ -29,7 +33,9 @@ public class VKProcessRequest implements IProcessNetRequest{
                     JSONArray jsonitems = (JSONArray) jsonresponce.get("items");
                     for (int i = 0; i < jsonitems.length(); i++) {
                         JSONObject jsonitem = (JSONObject) jsonitems.get(i);
-                        connectPosts.add(new ConnectPost(new VKPost(jsonitem)));
+                        VKPost vkPost=new VKPost(jsonitem);
+                        ConnectPost connectPost=new ConnectPost(vkPost);
+                        connectPosts.add(connectPost);
                     }
                 }catch (JSONException jsonException){
                     Log.e("ERROR","VKProcessRequest");
@@ -38,5 +44,15 @@ public class VKProcessRequest implements IProcessNetRequest{
         });
 
         return connectPosts;
+    }
+    static void checkNotMain() {
+        if (isMain()) {
+            throw new IllegalStateException("VKProcessRequest/Method call should not happen from the main thread.");
+        }
+    }
+
+
+    static boolean isMain() {
+        return Looper.getMainLooper().getThread() == Thread.currentThread();
     }
 }

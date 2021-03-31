@@ -5,13 +5,15 @@ package com.example.architectureofconnectapp;
 public class ConnectPost extends IPostfromNet{
     private String NameNet;
     private IPostfromNet post;
-    private SettingView settingView;
+    private SettingView settingView = new SettingView();
     ConnectPost(IPostfromNet post){
-        this.id=post.id;
+
+        this.id=post.getId();
         this.NameNet=post.getNameNet();
         this.post=post;
         this.NetPostJsonInfo=post.getNetPostJsonInfo();
         SettingBuilder();
+
     }
 
 
@@ -36,6 +38,9 @@ public class ConnectPost extends IPostfromNet{
         }
         if(post.comments!=0){
             settingView.setComment(true);
+        }
+        if(post.views!=0){
+            settingView.setViews(true);
         }
 
     }

@@ -11,16 +11,19 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
+import androidx.paging.PagedList;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.List;
+
 public class AdapterConnectNewsFeed extends PagedListAdapter<ConnectPost, AdapterConnectNewsFeed.ConnectPostViewHolder> {
+
 
     public AdapterConnectNewsFeed(@NonNull DiffUtil.ItemCallback<ConnectPost> diffCallback) {
         super(diffCallback);
     }
-
     @NonNull
     @Override
     public AdapterConnectNewsFeed.ConnectPostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -31,7 +34,31 @@ public class AdapterConnectNewsFeed extends PagedListAdapter<ConnectPost, Adapte
 
     @Override
     public void onBindViewHolder( AdapterConnectNewsFeed.ConnectPostViewHolder holder, int position) {
-        holder.Text.setText("");
+        IPostfromNet connectPost= getItem(position).getPostElements();
+        SettingView settingView=getItem(position).getSettingView();
+        if(settingView.getText()){
+            holder.Text.setVisibility(View.VISIBLE);
+            holder.Text.setText(connectPost.getText());
+        }
+        if(connectPost.Picture.size()!=0) {
+            holder.Picture.setVisibility(View.VISIBLE);
+            System.out.println(connectPost.getPicture().get(0));
+            holder.Picture.setImageBitmap(connectPost.getPicture().get(0));
+        }
+        if(settingView.getLike()){
+
+            holder.like.setText(connectPost.getLike()+"");
+        }
+        if(settingView.getRepost()) {
+            holder.repost.setText(connectPost.getRepost() + "");
+        }
+        if(settingView.getComment()){
+            holder.comment.setText(connectPost.getComments()+"");
+        }
+        if(settingView.getViews()) {
+            holder.views.setVisibility(View.VISIBLE);
+            holder.views.setText(connectPost.getViews() + "");
+        }
     }
     public static class ConnectPostViewHolder  extends RecyclerView.ViewHolder {
         final TextView Text,views;
