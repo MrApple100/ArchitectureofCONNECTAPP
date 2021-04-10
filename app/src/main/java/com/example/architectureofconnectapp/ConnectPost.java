@@ -6,7 +6,7 @@ public class ConnectPost extends IPostfromNet{
     private String NameNet;
     private IPostfromNet post;
     private SettingView settingView = new SettingView();
-    ConnectPost(IPostfromNet post){
+    public ConnectPost(IPostfromNet post){
 
         this.id=post.getId();
         this.NameNet=post.getNameNet();

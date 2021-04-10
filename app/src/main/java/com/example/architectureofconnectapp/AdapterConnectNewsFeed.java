@@ -36,6 +36,7 @@ public class AdapterConnectNewsFeed extends PagedListAdapter<ConnectPost, Adapte
     public void onBindViewHolder( AdapterConnectNewsFeed.ConnectPostViewHolder holder, int position) {
         IPostfromNet connectPost= getItem(position).getPostElements();
         SettingView settingView=getItem(position).getSettingView();
+        holder.Namesnetgroup.setText(connectPost.getNameNet()+"/"+connectPost.getNameGroup());
         if(settingView.getText()){
             holder.Text.setVisibility(View.VISIBLE);
             holder.Text.setText(connectPost.getText());
@@ -64,7 +65,7 @@ public class AdapterConnectNewsFeed extends PagedListAdapter<ConnectPost, Adapte
         }
     }
     public static class ConnectPostViewHolder  extends RecyclerView.ViewHolder {
-        final TextView Text,views;
+        final TextView Text,views,Namesnetgroup;
        // final MediaStore.Audio Audio;
         final VideoView Video;
         final ImageView Picture;
@@ -72,7 +73,8 @@ public class AdapterConnectNewsFeed extends PagedListAdapter<ConnectPost, Adapte
 
         ConnectPostViewHolder (View view){
             super(view);
-            Text= (TextView) view.findViewById(R.id.Text);
+            Namesnetgroup = (TextView) view.findViewById(R.id.namenet_nameqroup);
+            Text = (TextView) view.findViewById(R.id.Text);
             Video = (VideoView) view.findViewById(R.id.Video);
             Picture = (ImageView) view.findViewById(R.id.Picture);
             like = (Button) view.findViewById(R.id.like);

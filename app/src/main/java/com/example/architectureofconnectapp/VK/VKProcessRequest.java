@@ -1,8 +1,10 @@
-package com.example.architectureofconnectapp;
+package com.example.architectureofconnectapp.VK;
 
 import android.os.Looper;
 import android.util.Log;
 
+import com.example.architectureofconnectapp.ConnectPost;
+import com.example.architectureofconnectapp.IProcessNetRequest;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
@@ -14,10 +16,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class VKProcessRequest implements IProcessNetRequest{
+public class VKProcessRequest implements IProcessNetRequest {
     String next_fromtemp="0";
     @Override
-    public ArrayList<ConnectPost> makenextrequest(int count,String next_from) {
+    public ArrayList<ConnectPost> makenextrequest(int count, String next_from) {
         checkNotMain();
         ArrayList<ConnectPost> connectPosts=new ArrayList<>();
 
@@ -32,9 +34,19 @@ public class VKProcessRequest implements IProcessNetRequest{
                     JSONObject jsonresponce = (JSONObject) response.json.get("response");
                     next_fromtemp=jsonresponce.getString("next_from");
                     JSONArray jsonitems = (JSONArray) jsonresponce.get("items");
+                    JSONArray jsongroups = (JSONArray) jsonresponce.get("groups");
                     for (int i = 0; i < jsonitems.length(); i++) {
                         JSONObject jsonitem = (JSONObject) jsonitems.get(i);
                         VKPost vkPost=new VKPost(jsonitem);
+                        String idgroup = jsonitem.getString("source_id").substring(1);
+                        for(int j=0;j<jsongroups.length();j++) {
+                            JSONObject jsongroup=(JSONObject) jsongroups.get(j);
+                            if(jsongroup.getString("id").compareTo(idgroup)==0){
+                                vkPost.setNameGroup(jsongroup.getString("name"));
+                                vkPost.setJsongroup(jsongroup);
+                                System.out.println(vkPost.getNameGroup());
+                            }
+                        }
                         ConnectPost connectPost=new ConnectPost(vkPost);
                         connectPosts.add(connectPost);
                     }

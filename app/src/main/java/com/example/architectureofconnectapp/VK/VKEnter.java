@@ -1,13 +1,14 @@
-package com.example.architectureofconnectapp;
+package com.example.architectureofconnectapp.VK;
 
 import android.app.Activity;
 import android.content.Context;
 
+import com.example.architectureofconnectapp.NETLOGIN;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.util.VKUtil;
 
-public class VKEnter implements NETLOGIN{
+public class VKEnter implements NETLOGIN {
     @Override
     public void Enter(Activity activity) {
         String[] scope = new String[]{VKScope.FRIENDS,VKScope.GROUPS,VKScope.WALL};

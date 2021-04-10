@@ -3,12 +3,15 @@ package com.example.architectureofconnectapp;
 import android.graphics.Bitmap;
 import android.provider.MediaStore;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 public interface INetFromJson {
     long id(JSONObject json);
+
+    String NameGroup(JSONObject json);
 
     ArrayList<Bitmap> Picture(JSONObject json);
 

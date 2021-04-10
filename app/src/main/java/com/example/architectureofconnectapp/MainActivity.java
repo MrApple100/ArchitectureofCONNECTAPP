@@ -1,13 +1,11 @@
 package com.example.architectureofconnectapp;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
@@ -16,24 +14,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.example.architectureofconnectapp.VK.VKEnter;
+import com.example.architectureofconnectapp.VK.VKProcessRequest;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
-import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
-import com.vk.sdk.api.VKApi;
-import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKError;
-import com.vk.sdk.api.VKParameters;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
-import com.vk.sdk.api.model.VKList;
-import com.vk.sdk.util.VKUtil;
 
-import java.util.ArrayList;
-import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
-import javax.sql.DataSource;
 
 public class MainActivity extends AppCompatActivity {
     static Context instance;

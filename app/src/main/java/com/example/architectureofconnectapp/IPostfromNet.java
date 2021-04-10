@@ -14,6 +14,7 @@ public abstract class IPostfromNet {
         return id;
     }
 
+    protected String NameGroup;
     protected String text;
     protected ArrayList<Bitmap> Picture=new ArrayList<>();
     protected ArrayList<MediaStore.Video> Video=new ArrayList<>();
@@ -25,7 +26,9 @@ public abstract class IPostfromNet {
     protected int views=0;
 
 
-    abstract String getNameNet();
+    public abstract String getNameNet();
+
+    public String getNameGroup(){ return NameGroup;};
 
     public String getText() {
         return text;
