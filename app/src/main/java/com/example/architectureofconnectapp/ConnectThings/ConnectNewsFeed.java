@@ -1,6 +1,6 @@
-package com.example.architectureofconnectapp;
+package com.example.architectureofconnectapp.ConnectThings;
 
-import android.widget.Switch;
+import com.example.architectureofconnectapp.IProcessNetRequest;
 
 import java.util.ArrayList;
 import java.util.List;

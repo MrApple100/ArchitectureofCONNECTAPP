@@ -1,14 +1,12 @@
 package com.example.architectureofconnectapp;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.paging.PositionalDataSource;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
+import com.example.architectureofconnectapp.ConnectThings.ConnectNewsFeed;
+import com.example.architectureofconnectapp.ConnectThings.ConnectPost;
+
 import java.util.List;
-import java.util.ListIterator;
 
 public class MyPositionalDataSource extends PositionalDataSource<ConnectPost> {
 

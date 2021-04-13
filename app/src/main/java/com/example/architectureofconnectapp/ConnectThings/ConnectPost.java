@@ -1,8 +1,9 @@
-package com.example.architectureofconnectapp;
+package com.example.architectureofconnectapp.ConnectThings;
 
 
+import com.example.architectureofconnectapp.IPostfromNet;
 
-public class ConnectPost extends IPostfromNet{
+public class ConnectPost extends IPostfromNet {
     private String NameNet;
     private IPostfromNet post;
     private SettingView settingView = new SettingView();
@@ -18,28 +19,28 @@ public class ConnectPost extends IPostfromNet{
 
 
     private void SettingBuilder(){
-        if(post.text!=null){
+        if(post.getText()!=null){
             settingView.setText(true);
         }
-        if(post.Audio!=null){
+        if(post.getAudio()!=null){
             settingView.setAudio(true);
         }
-        if(post.Video!=null){
+        if(post.getVideo()!=null){
             settingView.setVideo(true);
         }
-        if(post.Picture!=null){
+        if(post.getPicture()!=null){
             settingView.setPicture(true);
         }
-        if(post.like!=0){
+        if(post.getLike()!=0){
             settingView.setLike(true);
         }
-        if(post.repost!=0){
+        if(post.getRepost()!=0){
             settingView.setRepost(true);
         }
-        if(post.comments!=0){
+        if(post.getComments()!=0){
             settingView.setComment(true);
         }
-        if(post.views!=0){
+        if(post.getViews()!=0){
             settingView.setViews(true);
         }
 

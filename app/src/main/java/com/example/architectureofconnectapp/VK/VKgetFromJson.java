@@ -1,4 +1,4 @@
-package com.example.architectureofconnectapp;
+package com.example.architectureofconnectapp.VK;
 
 import android.graphics.Bitmap;
 import android.net.UrlQuerySanitizer;
@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.architectureofconnectapp.INetFromJson;
+import com.example.architectureofconnectapp.MainActivity;
 import com.google.android.material.tabs.TabLayout;
 import com.squareup.picasso.Picasso;
 
@@ -25,11 +27,27 @@ import java.util.ArrayList;
 import java.util.logging.LogRecord;
 //каждый метод должен быть в другом потоке, чтобы не загружать основной
 //json - ссылка на пост
-public class VKgetFromJson implements INetFromJson{
+public class VKgetFromJson implements INetFromJson {
     @Override
     public long id(JSONObject json) {
+        long id=0;
+        try {
+            id=json.getInt("post_id");
+        }catch(JSONException e){
+            Log.e("Error","id");
+        }
+        return id;
+    }
 
-        return 0;
+    @Override
+    public String NameGroup(JSONObject json) {
+        String name=" ";
+        try {
+            name = json.getString("source_id").substring(1);
+        }catch (JSONException jsonException){
+            Log.e("Error","NameGroup");
+        }
+        return name;
     }
 
     public ArrayList<Bitmap> Picture(JSONObject json){

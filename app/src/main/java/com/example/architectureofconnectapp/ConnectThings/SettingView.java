@@ -1,4 +1,4 @@
-package com.example.architectureofconnectapp;
+package com.example.architectureofconnectapp.ConnectThings;
 
 public class SettingView {
     private Boolean text=false;

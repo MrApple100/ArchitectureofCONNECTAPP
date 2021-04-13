@@ -25,7 +25,6 @@ public abstract class IPostfromNet {
     protected int comments=0;
     protected int views=0;
 
-
     public abstract String getNameNet();
 
     public String getNameGroup(){ return NameGroup;};

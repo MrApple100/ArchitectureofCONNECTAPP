@@ -3,7 +3,7 @@ package com.example.architectureofconnectapp.VK;
 import android.os.Looper;
 import android.util.Log;
 
-import com.example.architectureofconnectapp.ConnectPost;
+import com.example.architectureofconnectapp.ConnectThings.ConnectPost;
 import com.example.architectureofconnectapp.IProcessNetRequest;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;

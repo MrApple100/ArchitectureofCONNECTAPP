@@ -3,8 +3,7 @@ package com.example.architectureofconnectapp;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 
-import java.util.List;
-import java.util.concurrent.Callable;
+import com.example.architectureofconnectapp.ConnectThings.ConnectPost;
 
 public class DiffUtilCallback extends DiffUtil.ItemCallback{
 
