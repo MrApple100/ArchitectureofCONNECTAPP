@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.architectureofconnectapp.ConnectThings.AdapterConnectNewsFeed;
 import com.example.architectureofconnectapp.ConnectThings.ConnectNewsFeed;
@@ -32,9 +33,11 @@ import com.vk.sdk.api.VKError;
 
 import java.util.concurrent.Executors;
 
+
 public class FragmentConnectNewsfeed extends Fragment {
 
     RecyclerView NewsFeed;
+    SwipeRefreshLayout LLswipe;
     LiveData<PagedList<ConnectPost>> pagedListData;
     AdapterConnectNewsFeed adapter;
 
@@ -53,9 +56,56 @@ public class FragmentConnectNewsfeed extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.connectnewsfeed,container,false);
         NewsFeed=(RecyclerView) view.findViewById(R.id.NewsFeed);
+        LLswipe=(SwipeRefreshLayout) view.findViewById(R.id.LLswipe);
+        LLswipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                ConnectNewsFeed connectNewsFeed = ConnectNewsFeed.getInstance();
+                connectNewsFeed.deleteforupdate();
+                MyNewsFeedTask myNewsFeedTask=new MyNewsFeedTask();
+                myNewsFeedTask.execute();
+                if(LLswipe.isRefreshing()){
+                    LLswipe.setRefreshing(false);
+                }
+            }
+        });
         return view;
     }
-    
+    class MyNewsFeedTask extends AsyncTask<Void,Void,Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+            ConnectNewsFeed connectNewsFeed = ConnectNewsFeed.getInstance();
+            VKProcessRequest vkProcessRequest=new VKProcessRequest();
+            MySourceFactory mySourceFactory= new MySourceFactory(connectNewsFeed,vkProcessRequest);
+            PagedList.Config config = new PagedList.Config.Builder()
+                    .setEnablePlaceholders(false)
+                    .setPageSize(10)
+                    .build();
+            pagedListData =new LivePagedListBuilder<>(mySourceFactory,config)
+                    .setFetchExecutor(Executors.newSingleThreadExecutor())
+                    .build();
+            DiffUtilCallback diffutilcalback=new DiffUtilCallback();
+            adapter = new AdapterConnectNewsFeed(diffutilcalback);
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void voids) {
+            super.onPostExecute(voids);
+            pagedListData.observe(MainActivity.getActivity(), new Observer<PagedList<ConnectPost>>() {
+                @Override
+                public void onChanged(PagedList<ConnectPost> connectPosts) {
+                    adapter.submitList(connectPosts);
+                }
+            });
+            NewsFeed.setAdapter(adapter);
+        }
+
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {

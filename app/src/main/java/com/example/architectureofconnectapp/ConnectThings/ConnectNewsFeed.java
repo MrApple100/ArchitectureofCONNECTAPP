@@ -17,8 +17,8 @@ public class ConnectNewsFeed {
         }
         return connectNewsFeed;
     }
-    public void update(){
-
+    public void deleteforupdate(){
+        next_from="0";
     }
 
     public List<ConnectPost> getPosts() {
