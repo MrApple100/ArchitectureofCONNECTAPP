@@ -3,6 +3,8 @@ package com.example.architectureofconnectapp.Fragments;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +42,7 @@ public class FragmentConnectNewsfeed extends Fragment {
     SwipeRefreshLayout LLswipe;
     LiveData<PagedList<ConnectPost>> pagedListData;
     AdapterConnectNewsFeed adapter;
+    Handler handler;
 
     public FragmentConnectNewsfeed() {
 
@@ -48,7 +51,19 @@ public class FragmentConnectNewsfeed extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        handler = new Handler(){
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                super.handleMessage(msg);
+                pagedListData.observe(MainActivity.getActivity(), new Observer<PagedList<ConnectPost>>() {
+                    @Override
+                    public void onChanged(PagedList<ConnectPost> connectPosts) {
+                        adapter.submitList(connectPosts);
+                    }
+                });
+                NewsFeed.setAdapter(adapter);
+            }
+        };
     }
 
     @Nullable
@@ -62,23 +77,21 @@ public class FragmentConnectNewsfeed extends Fragment {
             public void onRefresh() {
                 ConnectNewsFeed connectNewsFeed = ConnectNewsFeed.getInstance();
                 connectNewsFeed.deleteforupdate();
-                MyNewsFeedTask myNewsFeedTask=new MyNewsFeedTask();
-                myNewsFeedTask.execute();
+                MyNewsFeedThread myNewsFeedThread=new MyNewsFeedThread();
+                myNewsFeedThread.run();
                 if(LLswipe.isRefreshing()){
                     LLswipe.setRefreshing(false);
                 }
+
             }
         });
         return view;
     }
-    class MyNewsFeedTask extends AsyncTask<Void,Void,Void> {
+    class MyNewsFeedThread extends Thread {
+
 
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-        @Override
-        protected Void doInBackground(Void... voids) {
+        public void run() {
             ConnectNewsFeed connectNewsFeed = ConnectNewsFeed.getInstance();
             VKProcessRequest vkProcessRequest=new VKProcessRequest();
             MySourceFactory mySourceFactory= new MySourceFactory(connectNewsFeed,vkProcessRequest);
@@ -91,18 +104,7 @@ public class FragmentConnectNewsfeed extends Fragment {
                     .build();
             DiffUtilCallback diffutilcalback=new DiffUtilCallback();
             adapter = new AdapterConnectNewsFeed(diffutilcalback);
-            return null;
-        }
-        @Override
-        protected void onPostExecute(Void voids) {
-            super.onPostExecute(voids);
-            pagedListData.observe(MainActivity.getActivity(), new Observer<PagedList<ConnectPost>>() {
-                @Override
-                public void onChanged(PagedList<ConnectPost> connectPosts) {
-                    adapter.submitList(connectPosts);
-                }
-            });
-            NewsFeed.setAdapter(adapter);
+            handler.sendEmptyMessage(1);
         }
 
     }
