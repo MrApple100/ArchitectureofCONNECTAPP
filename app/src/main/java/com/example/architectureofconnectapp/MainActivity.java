@@ -10,9 +10,14 @@ import android.content.Context;
 import android.content.Intent;
 
 import android.os.Bundle;
+import android.util.Log;
 
+import com.example.architectureofconnectapp.ConnectThings.ConnectNewsFeed;
 import com.example.architectureofconnectapp.Fragments.FragmentConnectNewsfeed;
+import com.example.architectureofconnectapp.Fragments.FragmentNavigationPanel;
+import com.example.architectureofconnectapp.Fragments.FragmentNewConnectPost;
 import com.example.architectureofconnectapp.VK.VKEnter;
+import com.google.android.material.navigation.NavigationView;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKSdk;
@@ -31,7 +36,6 @@ public class MainActivity extends FragmentActivity {
         return activity;
     }
 
-    Fragment ConnectNewsFeed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +46,14 @@ public class MainActivity extends FragmentActivity {
 
         new VKEnter().Enter(this);
 
-        ConnectNewsFeed = new FragmentConnectNewsfeed();
+        FragmentConnectNewsfeed ConnectNewsFeed = FragmentConnectNewsfeed.getInstance();
+        FragmentNavigationPanel NavigationPanel = new FragmentNavigationPanel();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.add(R.id.MainScene,ConnectNewsFeed);
+        ft.commit();
+        ft = fm.beginTransaction();
+        ft.add(R.id.Nav_footer,NavigationPanel);
         ft.commit();
 
 
@@ -57,11 +65,11 @@ public class MainActivity extends FragmentActivity {
         if(VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
             @Override
             public void onResult(VKAccessToken res) {
-                ConnectNewsFeed.onActivityResult( requestCode, resultCode, data);
+                FragmentConnectNewsfeed.getInstance().onActivityResult( requestCode, resultCode, data);
             }
             @Override
             public void onError(VKError error) {
-                ConnectNewsFeed.onActivityResult( requestCode, resultCode, data);
+                FragmentConnectNewsfeed.getInstance().onActivityResult( requestCode, resultCode, data);
             }
         }))
             super.onActivityResult(requestCode, resultCode, data);

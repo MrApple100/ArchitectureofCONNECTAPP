@@ -38,15 +38,24 @@ import java.util.concurrent.Executors;
 
 public class FragmentConnectNewsfeed extends Fragment {
 
-    RecyclerView NewsFeed;
-    SwipeRefreshLayout LLswipe;
-    LiveData<PagedList<ConnectPost>> pagedListData;
-    AdapterConnectNewsFeed adapter;
-    Handler handler;
+    static RecyclerView NewsFeed;
+    static SwipeRefreshLayout LLswipe;
+    static LiveData<PagedList<ConnectPost>> pagedListData;
+    static AdapterConnectNewsFeed adapter;
+    static Handler handler;
+    private static FragmentConnectNewsfeed instance;
 
-    public FragmentConnectNewsfeed() {
+    public static FragmentConnectNewsfeed getInstance() {
+        if (instance == null) {
+            instance = new FragmentConnectNewsfeed();
+        }else {
+            ConnectNewsFeed connectNewsFeed = ConnectNewsFeed.getInstance();
+            connectNewsFeed.deleteforupdate();
 
+        }
+        return instance;
     }
+    public FragmentConnectNewsfeed() { }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,11 +94,10 @@ public class FragmentConnectNewsfeed extends Fragment {
 
             }
         });
+        update();
         return view;
     }
     class MyNewsFeedThread extends Thread {
-
-
         @Override
         public void run() {
             ConnectNewsFeed connectNewsFeed = ConnectNewsFeed.getInstance();
@@ -113,28 +121,7 @@ public class FragmentConnectNewsfeed extends Fragment {
         if(VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
             @Override
             public void onResult(VKAccessToken res) {
-                ConnectNewsFeed connectNewsFeed = ConnectNewsFeed.getInstance();
-                VKProcessRequest vkProcessRequest=new VKProcessRequest();
-                MySourceFactory mySourceFactory = new MySourceFactory(connectNewsFeed,vkProcessRequest);
-                PagedList.Config config = new PagedList.Config.Builder()
-                        .setEnablePlaceholders(false)
-                        .setPrefetchDistance(5)
-                        .setPageSize(10)
-                        .build();
-                pagedListData =new LivePagedListBuilder<>(mySourceFactory,config)
-                        .setFetchExecutor(Executors.newSingleThreadExecutor())
-                        .build();
-                DiffUtilCallback diffutilcalback=new DiffUtilCallback();
-                adapter = new AdapterConnectNewsFeed(diffutilcalback);
-
-                pagedListData.observe(MainActivity.getActivity(), new Observer<PagedList<ConnectPost>>() {
-                    @Override
-                    public void onChanged(@Nullable PagedList<ConnectPost> connectPosts) {
-                        System.out.println("onChanged");
-                        adapter.submitList(connectPosts);
-                    }
-                });
-                NewsFeed.setAdapter(adapter);
+               // update();
             }
 
             @Override
@@ -144,5 +131,29 @@ public class FragmentConnectNewsfeed extends Fragment {
         }))
             super.onActivityResult(requestCode, resultCode, data);
 
+    }
+    private void update(){
+        ConnectNewsFeed connectNewsFeed = ConnectNewsFeed.getInstance();
+        VKProcessRequest vkProcessRequest=new VKProcessRequest();
+        MySourceFactory mySourceFactory = new MySourceFactory(connectNewsFeed,vkProcessRequest);
+        PagedList.Config config = new PagedList.Config.Builder()
+                .setEnablePlaceholders(false)
+                .setPrefetchDistance(5)
+                .setPageSize(10)
+                .build();
+        pagedListData =new LivePagedListBuilder<>(mySourceFactory,config)
+                .setFetchExecutor(Executors.newSingleThreadExecutor())
+                .build();
+        DiffUtilCallback diffutilcalback=new DiffUtilCallback();
+        adapter = new AdapterConnectNewsFeed(diffutilcalback);
+
+        pagedListData.observe(MainActivity.getActivity(), new Observer<PagedList<ConnectPost>>() {
+            @Override
+            public void onChanged(@Nullable PagedList<ConnectPost> connectPosts) {
+                System.out.println("onChanged");
+                adapter.submitList(connectPosts);
+            }
+        });
+        NewsFeed.setAdapter(adapter);
     }
 }

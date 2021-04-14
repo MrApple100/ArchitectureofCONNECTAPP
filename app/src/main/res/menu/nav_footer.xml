@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="@color/purplenavfooter">
+
+    <item
+        android:id="@+id/ToNewsFeed"
+        android:title="Newsfeed"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:enabled="true"
+        android:icon="@mipmap/home"
+        android:iconTint="#FFFFFF"
+        android:textColor="@color/greypurple">
+    </item>
+    <item
+        android:id="@+id/ToSearch"
+        android:title="Search"
+        android:textColor="@color/greypurple"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        >
+    </item>
+    <item
+        android:id="@+id/ToCreate"
+        android:title="Create"
+        android:textColor="@color/greypurple"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        >
+    </item>
+    <item
+        android:id="@+id/ToProfile"
+        android:title="Profile"
+        android:textColor="@color/greypurple"
+        android:icon="@mipmap/profile"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        >
+    </item>
+</menu>

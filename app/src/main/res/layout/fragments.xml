@@ -4,19 +4,27 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 <fragment
+    android:id="@+id/fragmentNewCoonectPost"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:name="com.example.architectureofconnectapp.Fragments.Fragmentnewconnectpost">
+    android:name="com.example.architectureofconnectapp.Fragments.FragmentNewConnectPost">
 
 </fragment>
 <fragment
+    android:id="@+id/fragmentConnectNewsfeed"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:name="com.example.architectureofconnectapp.Fragments.FragmentConnectNewsfeed">
-
 </fragment>
+    <fragment
+        android:id="@+id/fragmentNavigationPanel"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:name="com.example.architectureofconnectapp.Fragments.FragmentNavigationPanel"
+        android:layout_alignParentBottom="true">
+    </fragment>
 </RelativeLayout>
