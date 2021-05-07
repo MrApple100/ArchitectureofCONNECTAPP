@@ -54,27 +54,13 @@
         </TextView>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/LLPhotosPlace"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/upper"
-        android:gravity="center">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/PhotosPlace"
-            android:layout_width="300dp"
-            android:layout_height="210dp"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="20dp"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"></androidx.recyclerview.widget.RecyclerView>
-    </LinearLayout>
     <LinearLayout
         android:id="@+id/LLTextPlace"
-        android:layout_below="@+id/LLPhotosPlace"
+        android:layout_below="@+id/upper"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:minHeight="100dp">
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -85,5 +71,29 @@
             android:hint="Чем поделитесь?">
         </EditText>
         </ScrollView>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/LLPhotosPlace"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/LLTextPlace"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/PhotosPlace"
+            android:layout_width="300dp"
+            android:layout_height="210dp"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="20dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager">
+        </androidx.recyclerview.widget.RecyclerView>
+        <Button
+            android:id="@+id/addPhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Добавить фото">
+        </Button>
     </LinearLayout>
 </RelativeLayout>

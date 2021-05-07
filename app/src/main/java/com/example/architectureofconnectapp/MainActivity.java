@@ -62,6 +62,8 @@ public class MainActivity extends FragmentActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
         if(VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
             @Override
             public void onResult(VKAccessToken res) {
@@ -72,7 +74,13 @@ public class MainActivity extends FragmentActivity {
                 FragmentConnectNewsfeed.getInstance().onActivityResult( requestCode, resultCode, data);
             }
         }))
-            super.onActivityResult(requestCode, resultCode, data);
+
+
+        if(requestCode==FragmentNewConnectPost.getInstance().getRequest_Code()) {
+            if (resultCode == MainActivity.RESULT_OK) {
+                FragmentNewConnectPost.getInstance().onActivityResult( requestCode, resultCode, data);
+            }
+        }
 
     }
 }
