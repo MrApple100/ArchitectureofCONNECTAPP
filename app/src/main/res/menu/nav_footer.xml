@@ -10,17 +10,16 @@
     <item
         android:id="@+id/ToNewsFeed"
         android:title="Newsfeed"
-        android:layout_width="200dp"
-        android:layout_height="60dp"
-        android:enabled="true"
         android:icon="@mipmap/home"
-        android:iconTint="#FFFFFF"
-        android:textColor="@color/greypurple">
+        android:textColor="@color/greypurple"
+        android:layout_width="200dp"
+        android:layout_height="60dp">
     </item>
     <item
         android:id="@+id/ToSearch"
         android:title="Search"
         android:textColor="@color/greypurple"
+        android:icon="@mipmap/search"
         android:layout_width="200dp"
         android:layout_height="60dp"
         >
@@ -29,6 +28,7 @@
         android:id="@+id/ToCreate"
         android:title="Create"
         android:textColor="@color/greypurple"
+        android:icon="@mipmap/add"
         android:layout_width="200dp"
         android:layout_height="60dp"
         >

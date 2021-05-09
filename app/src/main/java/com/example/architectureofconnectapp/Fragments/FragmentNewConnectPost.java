@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Lifecycle;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.architectureofconnectapp.ConnectThings.AdapterPhotoPlaces;
@@ -72,7 +73,9 @@ public class FragmentNewConnectPost extends Fragment {
         Cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PhotoPlaces.removeAllViews();
+                bitmaps.clear();
+                ((AdapterPhotoPlaces) PhotoPlaces.getAdapter()).setBitmapsList(null);
+                PhotoPlaces.getAdapter().notifyDataSetChanged();
                 TextPlace.setText("");
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
@@ -95,6 +98,24 @@ public class FragmentNewConnectPost extends Fragment {
                 connectPageCreatePost.SentPost(new VKProcessRequest());
             }
         });
+
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.DOWN | ItemTouchHelper.UP) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                System.out.println("hi");
+                if (direction == ItemTouchHelper.DOWN || direction == ItemTouchHelper.UP) {
+                    ((AdapterPhotoPlaces) PhotoPlaces.getAdapter()).getBitmapsList().remove(viewHolder.getAdapterPosition());
+                    bitmaps=((AdapterPhotoPlaces) PhotoPlaces.getAdapter()).getBitmapsList();
+                    PhotoPlaces.getAdapter().notifyDataSetChanged();
+                }
+            }
+        };
+        new ItemTouchHelper(simpleCallback).attachToRecyclerView(PhotoPlaces);
         return view;
     }
 

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.architectureofconnectapp.IPostfromNet;
+import com.example.architectureofconnectapp.MainActivity;
 import com.example.architectureofconnectapp.R;
 import com.example.architectureofconnectapp.VK.VKInterection;
 
@@ -44,7 +45,7 @@ public class AdapterConnectNewsFeed extends PagedListAdapter<ConnectPost, Adapte
         }
         if(connectPost.getPicture().size()!=0) {
             holder.Picture.setVisibility(View.VISIBLE);
-            holder.Picture.setImageBitmap(connectPost.getPicture().get(0));
+            holder.Picture.setAdapter(new AdapterPhotoPlaces(MainActivity.getInstance(),connectPost.getPicture()));
         }else{
             holder.Picture.setVisibility(View.GONE);
         }
@@ -54,12 +55,12 @@ public class AdapterConnectNewsFeed extends PagedListAdapter<ConnectPost, Adapte
             holder.like.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new VKInterection().like((long)holder.like.getTag());
+                    new VKInterection().like(connectPost.getNetPostJsonInfo(),(long)holder.like.getTag());
                     System.out.println(holder.like.getTag());
                 }
             });
         }
-        if(settingView.getRepost()) {
+        if(settingView.getRepost() ) {
             holder.repost.setText(connectPost.getRepost() + "");
         }
         if(settingView.getComment()){
@@ -74,7 +75,7 @@ public class AdapterConnectNewsFeed extends PagedListAdapter<ConnectPost, Adapte
         final TextView Text,views,Namesnetgroup;
        // final MediaStore.Audio Audio;
         final VideoView Video;
-        final ImageView Picture;
+        final RecyclerView Picture;
         final Button like,repost,comment;
 
         ConnectPostViewHolder (View view){
@@ -82,7 +83,7 @@ public class AdapterConnectNewsFeed extends PagedListAdapter<ConnectPost, Adapte
             Namesnetgroup = (TextView) view.findViewById(R.id.namenet_nameqroup);
             Text = (TextView) view.findViewById(R.id.Text);
             Video = (VideoView) view.findViewById(R.id.Video);
-            Picture = (ImageView) view.findViewById(R.id.Picture);
+            Picture = (RecyclerView) view.findViewById(R.id.Picture);
             like = (Button) view.findViewById(R.id.like);
             views = (TextView) view.findViewById(R.id.views);
             repost = (Button) view.findViewById(R.id.repost);

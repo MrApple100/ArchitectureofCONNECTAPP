@@ -2,19 +2,30 @@ package com.example.architectureofconnectapp.VK;
 
 import com.example.architectureofconnectapp.IInterection;
 import com.example.architectureofconnectapp.R;
+import com.vk.sdk.VKAccessToken;
+import com.vk.sdk.VKSdk;
+import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.model.VKApiPost;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class VKInterection implements IInterection {
     @Override
-    public void like(long Post_id) {
-        VKRequest vkRequest =new VKRequest("likes.add", VKParameters.from("type","post","item_id",Post_id,VKApiConst.ACCESS_TOKEN, "e87f08b0e87f08b0e87f08b017e8082f7bee87fe87f08b0881b5d945c603573ca20e40d"));
-        vkRequest.executeSyncWithListener(new VKRequest.VKRequestListener() {
+    public void like(JSONObject jsonpost,long Post_id) {
+        String source_id="";
+        try{
+            source_id=jsonpost.getString("source_id");
+        }catch(JSONException e){
+
+        }
+        VKRequest vkRequest =new VKRequest("likes.add", VKParameters.from("type","post",VKApiConst.OWNER_ID,source_id,"item_id",Post_id));
+        System.out.println("REQUEST: "+vkRequest.toString());
+        vkRequest.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
@@ -27,6 +38,7 @@ public class VKInterection implements IInterection {
                 }
             }
         });
+        VKApiPost vkApiPost = new VKApiPost();
 
     }
 
