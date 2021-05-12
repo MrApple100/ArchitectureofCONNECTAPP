@@ -18,7 +18,10 @@ public class DiffUtilCallback extends DiffUtil.ItemCallback{
     public boolean areContentsTheSame(@NonNull Object oldItem, @NonNull Object newItem) {
         ConnectPost oldconnectPost = (ConnectPost) oldItem;
         ConnectPost newconnectPost = (ConnectPost) newItem;
-        return oldconnectPost.getText().equals(newconnectPost.getText());
+        if(oldconnectPost.getSettingView().getText()!=null && newconnectPost.getSettingView().getText()!=null)
+            return oldconnectPost.getId()==newconnectPost.getId();
+        else
+            return false;
     }
 
 

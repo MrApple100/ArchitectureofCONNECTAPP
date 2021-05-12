@@ -66,6 +66,7 @@ public class FragmentNavigationPanel extends Fragment {
 
     private void loadFragment(Fragment fragment) {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.setCustomAnimations(R.anim.alphaup,R.anim.alphadown);
         ft.replace(R.id.MainScene, fragment);
         ft.commit();
     }

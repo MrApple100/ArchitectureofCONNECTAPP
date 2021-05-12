@@ -12,11 +12,14 @@ import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -24,24 +27,33 @@ import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.architectureofconnectapp.APIforServer.Network;
 import com.example.architectureofconnectapp.ConnectThings.AdapterPhotoPlaces;
 import com.example.architectureofconnectapp.ConnectThings.ConnectPageCreatePost;
 
 import com.example.architectureofconnectapp.MainActivity;
+import com.example.architectureofconnectapp.Model.Users;
 import com.example.architectureofconnectapp.PicturesfromGallery.SetterPictures;
 import com.example.architectureofconnectapp.R;
 import com.example.architectureofconnectapp.VK.VKProcessRequest;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
 public class FragmentNewConnectPost extends Fragment {
     private int Request_Code=1;
-    static Button Cancel;
-    static Button Access;
-    static Button AddPhoto;
+    static TextView Cancel;
+    static TextView Access;
+    static TextView AddPhoto;
     static RecyclerView PhotoPlaces;
     ArrayList<Bitmap> bitmaps=new ArrayList<>();
     static EditText TextPlace;
+
+    static TextView VKname;
+    static Switch VKswitch;
+
+
     private static FragmentNewConnectPost instance;
 
     public static FragmentNewConnectPost getInstance() {
@@ -62,14 +74,27 @@ public class FragmentNewConnectPost extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.newconnectpost,container,false);
-        Cancel = (Button) view.findViewById(R.id.Cancel);
-        Access = (Button) view.findViewById(R.id.Access);
-        AddPhoto = (Button) view.findViewById(R.id.addPhoto);
+        Cancel = (TextView) view.findViewById(R.id.Cancel);
+        Access = (TextView) view.findViewById(R.id.Access);
+        AddPhoto = (TextView) view.findViewById(R.id.addPhoto);
         PhotoPlaces = (RecyclerView) view.findViewById(R.id.PhotosPlace);
         AdapterPhotoPlaces adapter=new AdapterPhotoPlaces(MainActivity.getInstance(),bitmaps);
         PhotoPlaces.setAdapter(adapter);
 
         TextPlace = (EditText) view.findViewById(R.id.TextPlace);
+
+        VKname = (TextView) view.findViewById(R.id.VKname);
+        String name = null;
+        String lastname =null;
+        try {
+            name = Users.getInstance().getUsersofNet().get("VK").getString("first_name");
+            lastname = Users.getInstance().getUsersofNet().get("VK").getString("last_name");
+        } catch (JSONException jsonException) {
+            jsonException.printStackTrace();
+        }
+        VKname.setText(name+" "+lastname);
+        VKswitch = (Switch) view.findViewById(R.id.VKswitch);
+
         Cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,7 +120,8 @@ public class FragmentNewConnectPost extends Fragment {
             @Override
             public void onClick(View v) {
                 ConnectPageCreatePost connectPageCreatePost=new ConnectPageCreatePost(TextPlace.getText().toString(), ((AdapterPhotoPlaces) PhotoPlaces.getAdapter()).getBitmapsList());
-                connectPageCreatePost.SentPost(new VKProcessRequest());
+                if(VKswitch.isChecked())
+                    connectPageCreatePost.SentPost(new VKProcessRequest());
             }
         });
 

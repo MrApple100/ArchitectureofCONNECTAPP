@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,8 @@ import java.util.concurrent.Executors;
 
 public class FragmentConnectNewsfeed extends Fragment {
 
+    static final boolean[] refreshend = new boolean[1];
+
     static RecyclerView NewsFeed;
     static SwipeRefreshLayout LLswipe;
     static LiveData<PagedList<ConnectPost>> pagedListData;
@@ -49,8 +52,8 @@ public class FragmentConnectNewsfeed extends Fragment {
         if (instance == null) {
             instance = new FragmentConnectNewsfeed();
         }else {
-            ConnectNewsFeed connectNewsFeed = ConnectNewsFeed.getInstance();
-            connectNewsFeed.deleteforupdate();
+            //ConnectNewsFeed connectNewsFeed = ConnectNewsFeed.getInstance();
+            //connectNewsFeed.deleteforupdate();
 
         }
         return instance;
@@ -71,6 +74,7 @@ public class FragmentConnectNewsfeed extends Fragment {
                     }
                 });
                 NewsFeed.setAdapter(adapter);
+                refreshend[0] =true;
             }
         };
     }
@@ -84,23 +88,32 @@ public class FragmentConnectNewsfeed extends Fragment {
         LLswipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                ConnectNewsFeed connectNewsFeed = ConnectNewsFeed.getInstance();
-                connectNewsFeed.deleteforupdate();
-                MyNewsFeedThread myNewsFeedThread=new MyNewsFeedThread();
-                myNewsFeedThread.run();
+                Log.d("refresh",refreshend[0]+"");
+                if(refreshend[0]) {
+                    refreshend[0]=false;
+                    ConnectNewsFeed connectNewsFeed = ConnectNewsFeed.getInstance();
+                    connectNewsFeed.deleteforupdate();
+                    MyNewsFeedThread myNewsFeedThread = new MyNewsFeedThread();
+                    myNewsFeedThread.start();
+                }
+                Log.d("refresh",refreshend[0]+"");
                 if(LLswipe.isRefreshing()){
                     LLswipe.setRefreshing(false);
                 }
 
             }
         });
-        update();
+        ConnectNewsFeed connectNewsFeed = ConnectNewsFeed.getInstance();
+        connectNewsFeed.deleteforupdate();
+        MyNewsFeedThread myNewsFeedThread=new MyNewsFeedThread();
+        myNewsFeedThread.start();
         return view;
     }
     class MyNewsFeedThread extends Thread {
         @Override
         public void run() {
             ConnectNewsFeed connectNewsFeed = ConnectNewsFeed.getInstance();
+            Log.d("SSIIIZZZEEEE:", connectNewsFeed.getPosts().size()+"");
             VKProcessRequest vkProcessRequest=new VKProcessRequest();
             MySourceFactory mySourceFactory= new MySourceFactory(connectNewsFeed,vkProcessRequest);
             PagedList.Config config = new PagedList.Config.Builder()

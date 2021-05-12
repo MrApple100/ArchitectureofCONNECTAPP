@@ -1,5 +1,6 @@
 package com.example.architectureofconnectapp.ConnectThings;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import com.example.architectureofconnectapp.IPostfromNet;
 import com.example.architectureofconnectapp.MainActivity;
 import com.example.architectureofconnectapp.R;
 import com.example.architectureofconnectapp.VK.VKInterection;
+
+import org.json.JSONException;
 
 public class AdapterConnectNewsFeed extends PagedListAdapter<ConnectPost, AdapterConnectNewsFeed.ConnectPostViewHolder> {
 
@@ -37,6 +40,7 @@ public class AdapterConnectNewsFeed extends PagedListAdapter<ConnectPost, Adapte
         IPostfromNet connectPost= getItem(position).getPostElements();
         SettingView settingView=getItem(position).getSettingView();
         holder.Namesnetgroup.setText(connectPost.getNameNet()+"/"+connectPost.getNameGroup());
+        System.out.println(settingView.getText());
         if(settingView.getText()){
             holder.Text.setVisibility(View.VISIBLE);
             holder.Text.setText(connectPost.getText());
@@ -50,7 +54,7 @@ public class AdapterConnectNewsFeed extends PagedListAdapter<ConnectPost, Adapte
             holder.Picture.setVisibility(View.GONE);
         }
         if(settingView.getLike()){
-            holder.like.setText(connectPost.getLike()+"");
+            holder.like.setText(connectPost.getLike()+" likes");
             holder.like.setTag(connectPost.getId());
             holder.like.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -61,10 +65,10 @@ public class AdapterConnectNewsFeed extends PagedListAdapter<ConnectPost, Adapte
             });
         }
         if(settingView.getRepost() ) {
-            holder.repost.setText(connectPost.getRepost() + "");
+            holder.repost.setText(connectPost.getRepost() + " reposts");
         }
         if(settingView.getComment()){
-            holder.comment.setText(connectPost.getComments()+"");
+            holder.comment.setText(connectPost.getComments()+" comments");
         }
         if(settingView.getViews()) {
             holder.views.setVisibility(View.VISIBLE);
@@ -76,7 +80,7 @@ public class AdapterConnectNewsFeed extends PagedListAdapter<ConnectPost, Adapte
        // final MediaStore.Audio Audio;
         final VideoView Video;
         final RecyclerView Picture;
-        final Button like,repost,comment;
+        final TextView like,repost,comment;
 
         ConnectPostViewHolder (View view){
             super(view);
@@ -84,10 +88,10 @@ public class AdapterConnectNewsFeed extends PagedListAdapter<ConnectPost, Adapte
             Text = (TextView) view.findViewById(R.id.Text);
             Video = (VideoView) view.findViewById(R.id.Video);
             Picture = (RecyclerView) view.findViewById(R.id.Picture);
-            like = (Button) view.findViewById(R.id.like);
+            like = (TextView) view.findViewById(R.id.like);
             views = (TextView) view.findViewById(R.id.views);
-            repost = (Button) view.findViewById(R.id.repost);
-            comment = (Button) view.findViewById(R.id.comment);
+            repost = (TextView) view.findViewById(R.id.repost);
+            comment = (TextView) view.findViewById(R.id.comment);
 
         }
     }

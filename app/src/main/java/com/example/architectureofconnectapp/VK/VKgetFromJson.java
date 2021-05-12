@@ -62,7 +62,7 @@ public class VKgetFromJson implements INetFromJson {
                     JSONObject jsonObject2 = (JSONObject) jsonarrayattachments.get(j);
                     if(jsonObject2.getString("type").equals("photo")) {
                         JSONObject jsonObject3 = (JSONObject) jsonObject2.get("photo");
-                        bitmapstring.add(jsonObject3.getString("photo_604"));
+                        bitmapstring.add(jsonObject3.getString("photo_807"));
                     }
                 }
             }
@@ -133,8 +133,9 @@ public class VKgetFromJson implements INetFromJson {
     public int views(JSONObject json) {
         int views=0;
         try {
-
-            views = ((JSONObject)json.get("views")).getInt("count");
+            System.out.println(json.toString());
+            System.out.println(json.getJSONObject("views"));
+            views = (json.getJSONObject("views")).getInt("count");
         }catch (JSONException jsonException){
             Log.e("Error","Intviews");
         }

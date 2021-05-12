@@ -9,4 +9,11 @@
         <item name="android:textColor">@color/activepurple</item>
         <item name="android:textSize">15sp</item>
     </style>
+
+    <style name="MySwitch" parent="Theme.AppCompat.DayNight">
+        <item name="colorControlActivated">@color/purple_500</item>
+        <item name="colorControlHighlight">@color/purple_500</item>
+        <item name="colorSwitchThumbNormal">@color/purple_500</item>
+    </style>
+
 </resources>

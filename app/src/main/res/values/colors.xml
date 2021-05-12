@@ -7,7 +7,14 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="purplenavfooter">#ED341445</color>
+    <color name="purplenavfooter">#341445</color>
     <color name="greypurple">#81688F</color>
     <color name="activepurple">#C347FF</color>
+    <color name="buttonnewsfeed">#C347FF</color>
+    <color name="onepostnewsfeed">#9A59B5</color>
+    <color name="darkelementsnewsfeed">#7B4791</color>
+    <color name="darkdarknewsfeed">#4C255E</color>
+    <color name="buttonnewconnectpost">#01CEA7</color>
+    <color name="transparant">#00000000</color>
+
 </resources>

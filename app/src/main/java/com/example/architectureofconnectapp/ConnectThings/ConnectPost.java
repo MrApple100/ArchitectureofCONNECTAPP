@@ -19,7 +19,7 @@ public class ConnectPost extends IPostfromNet {
 
 
     private void SettingBuilder(){
-        if(post.getText()!=null){
+        if(!post.getText().equals("")){
             settingView.setText(true);
         }
         if(post.getAudio()!=null){

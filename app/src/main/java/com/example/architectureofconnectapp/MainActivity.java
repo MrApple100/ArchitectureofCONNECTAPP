@@ -23,6 +23,10 @@ import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 
+import twitter4j.Twitter;
+import twitter4j.TwitterAPIConfiguration;
+import twitter4j.TwitterAPIMonitor;
+
 
 public class MainActivity extends FragmentActivity {
     static Context instance;
@@ -45,6 +49,7 @@ public class MainActivity extends FragmentActivity {
         activity=MainActivity.this;
 
         new VKEnter().Enter(this);
+        Twitter
 
         FragmentConnectNewsfeed ConnectNewsFeed = FragmentConnectNewsfeed.getInstance();
         FragmentNavigationPanel NavigationPanel = new FragmentNavigationPanel();
