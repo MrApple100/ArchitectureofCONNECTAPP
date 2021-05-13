@@ -26,6 +26,8 @@ import com.vk.sdk.api.VKError;
 import twitter4j.Twitter;
 import twitter4j.TwitterAPIConfiguration;
 import twitter4j.TwitterAPIMonitor;
+import twitter4j.TwitterFactory;
+import twitter4j.conf.ConfigurationBuilder;
 
 
 public class MainActivity extends FragmentActivity {
@@ -49,8 +51,16 @@ public class MainActivity extends FragmentActivity {
         activity=MainActivity.this;
 
         new VKEnter().Enter(this);
-        Twitter
+        /*ConfigurationBuilder cb = new ConfigurationBuilder();
+        cb.setDebugEnabled(true)
+                .setOAuthConsumerKey("your consumer key")
+                .setOAuthConsumerSecret("your consumer secret")
+                .setOAuthAccessToken("your access token")
+                .setOAuthAccessTokenSecret("your access token secret");
+        TwitterFactory tf = new TwitterFactory(cb.build());
+        Twitter twitter = tf.getInstance();
 
+         */
         FragmentConnectNewsfeed ConnectNewsFeed = FragmentConnectNewsfeed.getInstance();
         FragmentNavigationPanel NavigationPanel = new FragmentNavigationPanel();
         FragmentManager fm = getSupportFragmentManager();

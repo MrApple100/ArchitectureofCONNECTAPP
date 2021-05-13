@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.architectureofconnectapp.APIforServer.Network;
+import com.example.architectureofconnectapp.Model.User;
 import com.example.architectureofconnectapp.Model.Users;
 import com.example.architectureofconnectapp.NETLOGIN;
 import com.vk.sdk.VKAccessToken;
@@ -43,15 +44,24 @@ public class VKEnter implements NETLOGIN {
                 @Override
                 public void onComplete(VKResponse response) {
                     super.onComplete(response);
-                    network.postUserInfo("VK",response.json);
-                    System.out.println(response.json);
-                    HashMap<String, JSONObject> VKs=new HashMap<String, JSONObject>();
+
                     try {
-                        VKs.put("VK",response.json.getJSONArray("response").getJSONObject(0));
+                        JSONObject jsonUser = response.json.getJSONArray("response").getJSONObject(0);
+                        System.out.println(jsonUser.toString());
+                        User user1=new User(jsonUser.getString("first_name"),jsonUser.getLong("id"),jsonUser.getString("last_name"));
+                        network.postUserInfo((long)"VK".hashCode(),user1);
                     } catch (JSONException jsonException) {
                         jsonException.printStackTrace();
                     }
-                    Users.getInstance().setUsersofNet(VKs);
+                    Log.d("TTT","end");
+                    //network.deleteUserInfo("VK");
+                    /*try {
+                        Users.getInstance().getUsersofNet().put("VK",response.json.getJSONArray("response").getJSONObject(0));
+                    } catch (JSONException jsonException) {
+                        jsonException.printStackTrace();
+                    }
+
+                     */
                 }
             });
         }

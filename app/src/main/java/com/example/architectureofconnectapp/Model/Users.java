@@ -9,7 +9,7 @@ import java.util.TreeMap;
 
 public class Users {
     static Users instance;
-    private HashMap<String,JSONObject> UsersofNet=new HashMap<>();
+    private HashMap<Long,User> UsersofNet=new HashMap<>();
     public static Users getInstance(){
         if(instance==null){
             instance=new Users();
@@ -18,11 +18,11 @@ public class Users {
     }
     private Users() {}
 
-    public HashMap<String,JSONObject> getUsersofNet() {
+    public HashMap<Long,User> getUsersofNet() {
         return UsersofNet;
     }
 
-    public void setUsersofNet(HashMap<String,JSONObject> usersofNet) {
+    public void setUsersofNet(HashMap<Long,User> usersofNet) {
         UsersofNet = usersofNet;
     }
 }

@@ -1,32 +1,38 @@
 package com.example.architectureofconnectapp.APIforServer;
 
+import com.example.architectureofconnectapp.Model.User;
+
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
+import retrofit2.http.Field;
+import retrofit2.http.FieldMap;
 import retrofit2.http.GET;
+import retrofit2.http.HeaderMap;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Path;
+import retrofit2.http.Tag;
 
 public interface API {
 
-    @GET("User")
-    Call<Map<String,JSONObject>> getAll();
+    @GET("/Users")
+    Call<HashMap<Long,User>> getAll();
 
-    @GET("/User/{NetName}")
-    Call<JSONObject> getUserInfo(@Path("NetName") String NetName);
+    @POST("/Users/{NetName}")
+    Call<User> postUserInfo(@Path("NetName") Long NetName, @Body User UserInfo);
 
-    @POST("/User/{NetName}")
-    Call<JSONObject> postUserInfo(@Path("NetName") String NetName,@Body JSONObject UserInfo);
+    @DELETE("/Users/{NetName}")
+    Call<User> deleteUserInfo(@Path("NetName") Long NetName);
 
-    @DELETE("/User/{NetName}")
-    Call<Boolean> deleteUserInfo(@Path("NetName") String NetName);
-
-    @PUT("/User/{NetName}")
-    Call<Boolean> updateUserInfo(@Path("NetName") String NetName, @Body JSONObject UserInfo);
+    @PUT("/Users/{NetName}")
+    Call<User> updateUserInfo(@Path("NetName") Long NetName, @Body User UserInfo);
 }

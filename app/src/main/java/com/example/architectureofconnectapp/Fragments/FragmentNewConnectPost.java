@@ -86,12 +86,8 @@ public class FragmentNewConnectPost extends Fragment {
         VKname = (TextView) view.findViewById(R.id.VKname);
         String name = null;
         String lastname =null;
-        try {
-            name = Users.getInstance().getUsersofNet().get("VK").getString("first_name");
-            lastname = Users.getInstance().getUsersofNet().get("VK").getString("last_name");
-        } catch (JSONException jsonException) {
-            jsonException.printStackTrace();
-        }
+            name = Users.getInstance().getUsersofNet().get((long)"VK".hashCode()).getFirst_name();
+            lastname = Users.getInstance().getUsersofNet().get((long)"VK".hashCode()).getLast_name();
         VKname.setText(name+" "+lastname);
         VKswitch = (Switch) view.findViewById(R.id.VKswitch);
 

@@ -1,5 +1,8 @@
 package com.example.architectureofconnectapp.APIforServer;
 
+import android.util.Log;
+
+import com.example.architectureofconnectapp.Model.User;
 import com.example.architectureofconnectapp.Model.Users;
 
 import org.json.JSONObject;
@@ -29,82 +32,68 @@ public class Network {
     }
 
     public void getAll() {
-        api.getAll().enqueue(new Callback<Map<String, JSONObject>>() {
+        api.getAll().enqueue(new Callback<HashMap<Long, User>>() {
             @Override
-            public void onResponse(Call<Map<String,JSONObject>> call, Response<Map<String,JSONObject>> response) {
-                Users.getInstance().setUsersofNet((HashMap<String, JSONObject>) response.body());
+            public void onResponse(Call<HashMap<Long,User>> call, Response<HashMap<Long,User>> response) {
+                Users.getInstance().setUsersofNet((HashMap<Long, User>) response.body());
+                Log.d("TTT",response.body()+"");
+                Log.d("TTT",Users.getInstance().getUsersofNet().get((long)"VK".hashCode()).toString());
             }
 
             @Override
-            public void onFailure(Call<Map<String,JSONObject>> call, Throwable t) {
+            public void onFailure(Call<HashMap<Long,User>> call, Throwable t) {
 
             }
         });
     }
-    public JSONObject getUserInfo(String NetName) {
-        final JSONObject[] json = new JSONObject[1];
-        api.getUserInfo(NetName).enqueue(new Callback<JSONObject>() {
+
+
+
+    public void postUserInfo(Long NetName, User UserInfo) {
+        api.postUserInfo(NetName,UserInfo).enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
-                json[0] =response.body();
-            }
-
-            @Override
-            public void onFailure(Call<JSONObject> call, Throwable t) {
-
-            }
-        });
-        return json[0];
-    }
-
-
-    public void postUserInfo(String NetName, JSONObject UserInfo) {
-        api.postUserInfo(NetName,UserInfo).enqueue(new Callback<JSONObject>() {
-            @Override
-            public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+            public void onResponse(Call<User> call, Response<User> response) {
+                Log.d("TTT",response.body()+"");
                 getAll();
             }
 
             @Override
-            public void onFailure(Call<JSONObject> call, Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
 
             }
         });
 
     }
 
-    public boolean deleteUserInfo(String NetName) {
-        final Boolean[] resbool = new Boolean[1];
-        api.deleteUserInfo(NetName).enqueue(new Callback<Boolean>() {
+    public void deleteUserInfo(Long NetName) {
+        api.deleteUserInfo(NetName).enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                resbool[0] = response.body();
+            public void onResponse(Call<User> call, Response<User> response) {
+                Log.d("HashMap",response.body()+"");
+                System.out.println("HHMMMMMMMMMAP: "+response.body()+"");
                 getAll();
             }
 
             @Override
-            public void onFailure(Call<Boolean> call, Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
 
             }
         });
-        return resbool[0];
     }
 
 
-    public boolean updateUserInfo(String NetName, JSONObject UserInfo) {
-        final Boolean[] resbool = new Boolean[1];
-        api.updateUserInfo(NetName,UserInfo).enqueue(new Callback<Boolean>() {
+    public void updateUserInfo(Long NetName, User UserInfo) {
+
+        api.updateUserInfo(NetName,UserInfo).enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                resbool[0] = response.body();
+            public void onResponse(Call<User> call, Response<User> response) {
                 getAll();
             }
 
             @Override
-            public void onFailure(Call<Boolean> call, Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
 
             }
         });
-        return resbool[0];
     }
 }
