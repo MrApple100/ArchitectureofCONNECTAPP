@@ -1,5 +1,6 @@
 package com.example.architectureofconnectapp.Twitter;
 
+import twitter4j.Paging;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
@@ -7,6 +8,7 @@ import twitter4j.conf.ConfigurationBuilder;
 public class TwitterBASE {
     private Twitter twitter;
     static private TwitterBASE twitterBASE;
+    private Paging paging=new Paging(1,10);
     static public TwitterBASE getinstance(){
         if(twitterBASE==null){
             twitterBASE=new TwitterBASE();
@@ -25,5 +27,13 @@ public class TwitterBASE {
 
     public Twitter getTwitter() {
         return twitter;
+    }
+
+    public Paging getPaging() {
+        return paging;
+    }
+
+    public void setPaging(Paging paging) {
+        this.paging = paging;
     }
 }

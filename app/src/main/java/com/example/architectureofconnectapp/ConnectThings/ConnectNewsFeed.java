@@ -23,6 +23,7 @@ public class ConnectNewsFeed {
         return connectNewsFeed;
     }
     public void deleteforupdate(){
+        //posts.clear();
         next_from.clear();
         next_from=new ArrayList<>(Arrays.asList("0","0"));
     }
@@ -35,13 +36,16 @@ public class ConnectNewsFeed {
         Count = count;
     }
     public void setPosts(ArrayList<IProcessNetRequest> iProcessNetRequests) {
+        ArrayList<ConnectPost> posttemps=new ArrayList<>();
         for(int i=0;i<iProcessNetRequests.size();i++) {
-
-            posts.addAll(iProcessNetRequests.get(i).makenextrequest(Count, next_from.get(i)));
+            posttemps.addAll(iProcessNetRequests.get(i).makenextrequest(Count, next_from.get(i)));
             //posts.addAll(gettedposts);
             next_from.set(i,iProcessNetRequests.get(i).sentNext_from());
+            Log.d("NEXT",next_from+"");
+            Log.d("NEXT",posts.size()+"");
         }
-
+        posts=posttemps;
+/*
         posts.sort(new Comparator<ConnectPost>() {
             @Override
             public int compare(ConnectPost o1, ConnectPost o2) {
@@ -52,5 +56,7 @@ public class ConnectNewsFeed {
                     return 1;
             }
         });
+
+ */
     }
 }

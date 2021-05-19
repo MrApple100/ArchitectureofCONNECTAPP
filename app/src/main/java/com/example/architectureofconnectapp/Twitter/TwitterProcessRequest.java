@@ -31,21 +31,32 @@ import twitter4j.json.DataObjectFactory;
 
 public class TwitterProcessRequest implements IProcessNetRequest {
     String next_fromtemp="0";
+    int count=0;
     @Override
     public ArrayList<ConnectPost> makenextrequest(int count, String next_from) {
         next_fromtemp=next_from;
-
         Twitter twitter=TwitterBASE.getinstance().getTwitter();
         ArrayList<ConnectPost> connectPosts=new ArrayList<>();
         TwitterPost twitterPost=null;
         try {
             System.out.println(twitter.getHomeTimeline().getRateLimitStatus().getLimit());
             System.out.println(twitter.getHomeTimeline().getRateLimitStatus().getSecondsUntilReset());
-            Paging paging=new Paging();
-            paging.setCount(count+count);
+            Paging paging=TwitterBASE.getinstance().getPaging();
+            if(next_from.compareTo("0")==0)
+                paging.setCount(30);
+            else {
+                int iii=Integer.parseInt(next_fromtemp)+3;
+                next_fromtemp=iii+"";
+                paging.setCount(10);
+            }
+            paging.setPage(Integer.parseInt(next_fromtemp)+1);
+            TwitterBASE.getinstance().setPaging(paging);
+            /*
             if(next_fromtemp.compareTo("0")!=0)
-                paging.setSinceId(Long.parseLong(next_fromtemp,10));
-           ArrayList<Status> statuses = (ArrayList<Status>) twitter.getHomeTimeline(paging);
+                paging.setSinceId(Long.parseLong(next_fromtemp));
+
+             */
+           ArrayList<Status> statuses = (ArrayList<Status>) twitter.getHomeTimeline(TwitterBASE.getinstance().getPaging());
             for (Status status : statuses) {
                 Date date = status.getCreatedAt();
                 long unixTime = (long)date.getTime()/1000;
@@ -57,7 +68,7 @@ public class TwitterProcessRequest implements IProcessNetRequest {
 
                 JSONObject jsonbase=new JSONObject(TwitterObjectFactory.getRawJSON(status));
                 System.out.println(jsonbase.toString()+"");
-                next_fromtemp=jsonbase.getString("id");
+                //next_fromtemp=jsonbase.getString("id");
                 twitterPost=new TwitterPost(jsonbase);
 
                 twitterPost.setJsongroup(jsonbase.getJSONObject("user"));
@@ -85,7 +96,8 @@ public class TwitterProcessRequest implements IProcessNetRequest {
     }
     @Override
     public String sentNext_from() {
-        return next_fromtemp;
+        int iii =Integer.parseInt(next_fromtemp)+1;
+        return iii+"";
     }
 
     @Override
