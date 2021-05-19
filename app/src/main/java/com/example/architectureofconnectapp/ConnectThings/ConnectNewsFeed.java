@@ -1,15 +1,20 @@
 package com.example.architectureofconnectapp.ConnectThings;
 
+import android.util.Log;
+
 import com.example.architectureofconnectapp.IProcessNetRequest;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 public class ConnectNewsFeed {
     private static ConnectNewsFeed connectNewsFeed;
     private int Count=10;
-    private String next_from="0";
-    private List<ConnectPost> posts=new ArrayList<>();
+    private ArrayList<String> next_from=new ArrayList<>(Arrays.asList("0","0"));
+    private ArrayList<ConnectPost> posts=new ArrayList<>();
     private ConnectNewsFeed(){ }
     public static ConnectNewsFeed getInstance(){
         if(connectNewsFeed==null){
@@ -18,7 +23,8 @@ public class ConnectNewsFeed {
         return connectNewsFeed;
     }
     public void deleteforupdate(){
-        next_from="0";
+        next_from.clear();
+        next_from=new ArrayList<>(Arrays.asList("0","0"));
     }
 
     public List<ConnectPost> getPosts() {
@@ -28,10 +34,23 @@ public class ConnectNewsFeed {
     public void setCount(int count) {
         Count = count;
     }
-    public void setPosts(IProcessNetRequest iProcessNetRequest) {
-            posts = iProcessNetRequest.makenextrequest(Count,next_from);
+    public void setPosts(ArrayList<IProcessNetRequest> iProcessNetRequests) {
+        for(int i=0;i<iProcessNetRequests.size();i++) {
 
+            posts.addAll(iProcessNetRequests.get(i).makenextrequest(Count, next_from.get(i)));
             //posts.addAll(gettedposts);
-            next_from=iProcessNetRequest.sentNext_from();
+            next_from.set(i,iProcessNetRequests.get(i).sentNext_from());
+        }
+
+        posts.sort(new Comparator<ConnectPost>() {
+            @Override
+            public int compare(ConnectPost o1, ConnectPost o2) {
+
+                if(o1.getPostElements().getDatatime()>o2.getPostElements().getDatatime())
+                    return -1;
+                else
+                    return 1;
+            }
+        });
     }
 }

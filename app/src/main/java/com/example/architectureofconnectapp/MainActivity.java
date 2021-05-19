@@ -1,5 +1,6 @@
 package com.example.architectureofconnectapp;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -10,12 +11,16 @@ import android.content.Context;
 import android.content.Intent;
 
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
+import android.os.Message;
 
+
+import com.example.architectureofconnectapp.APIforServer.Network;
 import com.example.architectureofconnectapp.ConnectThings.ConnectNewsFeed;
 import com.example.architectureofconnectapp.Fragments.FragmentConnectNewsfeed;
 import com.example.architectureofconnectapp.Fragments.FragmentNavigationPanel;
 import com.example.architectureofconnectapp.Fragments.FragmentNewConnectPost;
+import com.example.architectureofconnectapp.Twitter.TwitterEnter;
 import com.example.architectureofconnectapp.VK.VKEnter;
 import com.google.android.material.navigation.NavigationView;
 import com.vk.sdk.VKAccessToken;
@@ -23,16 +28,13 @@ import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 
-import twitter4j.Twitter;
-import twitter4j.TwitterAPIConfiguration;
-import twitter4j.TwitterAPIMonitor;
-import twitter4j.TwitterFactory;
-import twitter4j.conf.ConfigurationBuilder;
+import twitter4j.TwitterException;
 
 
 public class MainActivity extends FragmentActivity {
     static Context instance;
     static MainActivity activity;
+    Handler handler;
 
     public static Context getInstance() {
         return instance;
@@ -49,18 +51,15 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
         instance=this;
         activity=MainActivity.this;
-
-        new VKEnter().Enter(this);
-        /*ConfigurationBuilder cb = new ConfigurationBuilder();
-        cb.setDebugEnabled(true)
-                .setOAuthConsumerKey("your consumer key")
-                .setOAuthConsumerSecret("your consumer secret")
-                .setOAuthAccessToken("your access token")
-                .setOAuthAccessTokenSecret("your access token secret");
-        TwitterFactory tf = new TwitterFactory(cb.build());
-        Twitter twitter = tf.getInstance();
-
-         */
+        new Network().getAll(handler);
+        handler=new Handler(){
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                super.handleMessage(msg);
+                new VKEnter().Enter(MainActivity.getActivity());
+                new TwitterEnter().Enter(MainActivity.getActivity());
+            }
+        };
         FragmentConnectNewsfeed ConnectNewsFeed = FragmentConnectNewsfeed.getInstance();
         FragmentNavigationPanel NavigationPanel = new FragmentNavigationPanel();
         FragmentManager fm = getSupportFragmentManager();
@@ -98,4 +97,5 @@ public class MainActivity extends FragmentActivity {
         }
 
     }
+
 }

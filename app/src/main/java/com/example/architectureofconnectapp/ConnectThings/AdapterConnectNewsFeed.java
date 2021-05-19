@@ -63,12 +63,19 @@ public class AdapterConnectNewsFeed extends PagedListAdapter<ConnectPost, Adapte
                     System.out.println(holder.like.getTag());
                 }
             });
+        }else{
+            holder.like.setText("no likes");
+            holder.like.setTag(connectPost.getId());
         }
         if(settingView.getRepost() ) {
             holder.repost.setText(connectPost.getRepost() + " reposts");
+        }else{
+            holder.repost.setText("no reposts");
         }
         if(settingView.getComment()){
             holder.comment.setText(connectPost.getComments()+" comments");
+        }else{
+            holder.comment.setText("no comments");
         }
         if(settingView.getViews()) {
             holder.views.setVisibility(View.VISIBLE);

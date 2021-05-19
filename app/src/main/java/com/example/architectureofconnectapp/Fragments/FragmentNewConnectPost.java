@@ -35,6 +35,7 @@ import com.example.architectureofconnectapp.MainActivity;
 import com.example.architectureofconnectapp.Model.Users;
 import com.example.architectureofconnectapp.PicturesfromGallery.SetterPictures;
 import com.example.architectureofconnectapp.R;
+import com.example.architectureofconnectapp.Twitter.TwitterProcessRequest;
 import com.example.architectureofconnectapp.VK.VKProcessRequest;
 
 import org.json.JSONException;
@@ -53,6 +54,8 @@ public class FragmentNewConnectPost extends Fragment {
     static TextView VKname;
     static Switch VKswitch;
 
+    static TextView Twittername;
+    static Switch Twitterswitch;
 
     private static FragmentNewConnectPost instance;
 
@@ -91,6 +94,11 @@ public class FragmentNewConnectPost extends Fragment {
         VKname.setText(name+" "+lastname);
         VKswitch = (Switch) view.findViewById(R.id.VKswitch);
 
+        Twittername = (TextView) view.findViewById(R.id.Twittername);
+            name = Users.getInstance().getUsersofNet().get((long)"Twitter".hashCode()).getFirst_name();
+            lastname = Users.getInstance().getUsersofNet().get((long)"Twitter".hashCode()).getLast_name();
+        Twittername.setText(name);
+
         Cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,6 +126,8 @@ public class FragmentNewConnectPost extends Fragment {
                 ConnectPageCreatePost connectPageCreatePost=new ConnectPageCreatePost(TextPlace.getText().toString(), ((AdapterPhotoPlaces) PhotoPlaces.getAdapter()).getBitmapsList());
                 if(VKswitch.isChecked())
                     connectPageCreatePost.SentPost(new VKProcessRequest());
+                if(Twitterswitch.isChecked())
+                    connectPageCreatePost.SentPost(new TwitterProcessRequest());
             }
         });
 

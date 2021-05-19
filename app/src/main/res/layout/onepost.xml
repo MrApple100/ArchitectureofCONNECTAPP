@@ -45,7 +45,10 @@
                 android:textIsSelectable="true"
                 android:textColor="@color/white"
                 android:textSize="14dp"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:autoLink="web"
+                android:textColorLink="@color/buttonnewsfeed"
+                android:linksClickable="true">
             </TextView>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/Picture"

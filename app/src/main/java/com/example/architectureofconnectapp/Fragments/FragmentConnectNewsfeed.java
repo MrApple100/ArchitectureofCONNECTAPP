@@ -25,15 +25,18 @@ import com.example.architectureofconnectapp.ConnectThings.AdapterConnectNewsFeed
 import com.example.architectureofconnectapp.ConnectThings.ConnectNewsFeed;
 import com.example.architectureofconnectapp.ConnectThings.ConnectPost;
 import com.example.architectureofconnectapp.DiffUtilCallback;
+import com.example.architectureofconnectapp.IProcessNetRequest;
 import com.example.architectureofconnectapp.MainActivity;
 import com.example.architectureofconnectapp.MySourceFactory;
 import com.example.architectureofconnectapp.R;
+import com.example.architectureofconnectapp.Twitter.TwitterProcessRequest;
 import com.example.architectureofconnectapp.VK.VKProcessRequest;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 
+import java.util.ArrayList;
 import java.util.concurrent.Executors;
 
 
@@ -115,7 +118,11 @@ public class FragmentConnectNewsfeed extends Fragment {
             ConnectNewsFeed connectNewsFeed = ConnectNewsFeed.getInstance();
             Log.d("SSIIIZZZEEEE:", connectNewsFeed.getPosts().size()+"");
             VKProcessRequest vkProcessRequest=new VKProcessRequest();
-            MySourceFactory mySourceFactory= new MySourceFactory(connectNewsFeed,vkProcessRequest);
+            TwitterProcessRequest twitterProcessRequest=new TwitterProcessRequest();
+            ArrayList<IProcessNetRequest> iProcessNetRequests=new ArrayList<>();
+            iProcessNetRequests.add(vkProcessRequest);
+            iProcessNetRequests.add(twitterProcessRequest);
+            MySourceFactory mySourceFactory= new MySourceFactory(connectNewsFeed,iProcessNetRequests);
             PagedList.Config config = new PagedList.Config.Builder()
                     .setEnablePlaceholders(false)
                     .setPageSize(10)
@@ -148,7 +155,11 @@ public class FragmentConnectNewsfeed extends Fragment {
     private void update(){
         ConnectNewsFeed connectNewsFeed = ConnectNewsFeed.getInstance();
         VKProcessRequest vkProcessRequest=new VKProcessRequest();
-        MySourceFactory mySourceFactory = new MySourceFactory(connectNewsFeed,vkProcessRequest);
+        TwitterProcessRequest twitterProcessRequest=new TwitterProcessRequest();
+        ArrayList<IProcessNetRequest> iProcessNetRequests=new ArrayList<>();
+        iProcessNetRequests.add(vkProcessRequest);
+        iProcessNetRequests.add(twitterProcessRequest);
+        MySourceFactory mySourceFactory= new MySourceFactory(connectNewsFeed,iProcessNetRequests);
         PagedList.Config config = new PagedList.Config.Builder()
                 .setEnablePlaceholders(false)
                 .setPrefetchDistance(5)

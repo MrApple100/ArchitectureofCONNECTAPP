@@ -13,7 +13,7 @@ public abstract class IPostfromNet {
     public long getId() {
         return id;
     }
-
+    protected Long datatime;
     protected String NameGroup;
     protected String text;
     protected ArrayList<Bitmap> Picture=new ArrayList<>();
@@ -62,5 +62,9 @@ public abstract class IPostfromNet {
     }
     public int getViews() {
         return views;
+    }
+
+    public Long getDatatime() {
+        return datatime;
     }
 }

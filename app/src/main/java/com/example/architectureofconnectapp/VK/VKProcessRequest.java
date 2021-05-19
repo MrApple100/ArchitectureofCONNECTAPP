@@ -53,7 +53,6 @@ public class VKProcessRequest implements IProcessNetRequest {
         ArrayList<ConnectPost> connectPosts=new ArrayList<>();
 
         VKRequest vkRequest =new VKRequest("newsfeed.get", VKParameters.from(VKApiConst.COUNT,count,"start_from",next_from,VKApiConst.FILTERS,"post,photos,notes,friends"));
-        System.out.println("REQUEST:"+vkRequest.context);
         vkRequest.executeSyncWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
@@ -73,7 +72,6 @@ public class VKProcessRequest implements IProcessNetRequest {
                             if(jsongroup.getString("id").compareTo(idgroup)==0){
                                 vkPost.setNameGroup(jsongroup.getString("name"));
                                 vkPost.setJsongroup(jsongroup);
-                                System.out.println(vkPost.getNameGroup());
                             }
                         }
                         ConnectPost connectPost=new ConnectPost(vkPost);
@@ -104,7 +102,7 @@ public class VKProcessRequest implements IProcessNetRequest {
                 }
             }
         });
-        System.out.println(url[0]);
+
 
         File imagefile = bitmapToFile(MainActivity.getInstance().getApplicationContext(),bitmaps.get(0),"someimage.png");
 
@@ -115,13 +113,11 @@ public class VKProcessRequest implements IProcessNetRequest {
 
             if (msg.obj != null){
                 ArrayList<String> strjson = (ArrayList<String>) msg.obj;
-                System.out.println(strjson);
                 JSONObject jsonresponse=null;
                 try {
                     jsonresponse = new JSONObject(strjson.get(0));
 
                     VKRequest vkphotoRequest =new VKRequest("photos.saveWallPhoto",VKParameters.from("server",jsonresponse.getString("server"),"photo",jsonresponse.getString("photo"),"hash",jsonresponse.getString("hash")));
-                    System.out.println("REQUEST:"+vkphotoRequest.toString());
                     vkphotoRequest.executeSyncWithListener((new VKRequest.VKRequestListener() {
                         @Override
                         public void onComplete(VKResponse response) {
@@ -130,14 +126,10 @@ public class VKProcessRequest implements IProcessNetRequest {
                             String jid;
                             try {
                                 JSONArray jsonresponce = (JSONArray) response.json.get("response");
-                                System.out.println("JHHH:"+jsonresponce);
-                                System.out.println(jsonresponce.length());
+
                                 Owner_id = jsonresponce.getJSONObject(0).getString("owner_id");
                                 id = jsonresponce.getJSONObject(0).getString("id");
-                                System.out.println("////////");
-                                System.out.println(Owner_id);
-                                System.out.println(id);
-                                System.out.println("////////////");
+
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -146,11 +138,11 @@ public class VKProcessRequest implements IProcessNetRequest {
                         @Override
                         public void onError(VKError error) {
                             super.onError(error);
-                            System.out.println(error);
+
                         }
                     }));
                     VKRequest vkRequest =new VKRequest("wall.post",VKParameters.from("message",text,"attachments","photo"+Owner_id+"_"+id));
-                    System.out.println("REQppspsf:"+vkRequest.toString());
+
                     vkRequest.executeSyncWithListener(new VKRequest.VKRequestListener() {
                         @Override
                         public void onComplete(VKResponse response) {
@@ -158,7 +150,7 @@ public class VKProcessRequest implements IProcessNetRequest {
                             //получаем id поста
                             try {
                                 JSONObject jsonresponce = (JSONObject) response.json.get("response");
-                                System.out.println(jsonresponce);
+
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -195,7 +187,7 @@ public class VKProcessRequest implements IProcessNetRequest {
         try {
             file = new File(context.getDataDir() ,"/" +fileNameToSave);
            if (!file.exists()) {
-                System.out.println("FILE: "+file.toString());
+
                 file.createNewFile();
             }
 
@@ -204,11 +196,11 @@ public class VKProcessRequest implements IProcessNetRequest {
             bitmap.compress(Bitmap.CompressFormat.PNG, 0 , bos); // YOU can also save it in JPEG
             byte[] bitmapdata = bos.toByteArray();
 
-                System.out.println("BYTE: "+bitmapdata.length);
+
 //write the bytes in file
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(bitmapdata);
-            System.out.println("FILE: "+file.toString());
+
             fos.flush();
             fos.close();
             return file;
@@ -233,25 +225,19 @@ public class VKProcessRequest implements IProcessNetRequest {
             List<String> response = null;
             try {
                 multipart = new MultipartUtility(url, charset);
-                System.out.println(multipart);
-                System.out.println("KKKKK1");
+
                 multipart.addFilePart("photo", uploadFile1);
                 //multipart.addFilePart("fileUpload", uploadFile2);
-                System.out.println("LLLLLLLLLLLL2");
+
                 response = multipart.finish();
 
-                System.out.println("SERVER REPLIED:");
-
-                for (String line : response) {
-                    System.out.println("RES: "+line);
-                }
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
             Message msg = new Message();
             msg.obj = response;
             handler.sendMessage(msg);
-            System.out.println("done");
+
         }
 
 

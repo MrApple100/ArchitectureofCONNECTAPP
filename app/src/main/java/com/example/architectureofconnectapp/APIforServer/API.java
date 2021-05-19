@@ -24,15 +24,15 @@ import retrofit2.http.Tag;
 
 public interface API {
 
-    @GET("/Users")
+    @GET("Users")
     Call<HashMap<Long,User>> getAll();
 
-    @POST("/Users/{NetName}")
+    @POST("Users/{NetName}")
     Call<User> postUserInfo(@Path("NetName") Long NetName, @Body User UserInfo);
 
-    @DELETE("/Users/{NetName}")
+    @DELETE("Users/{NetName}")
     Call<User> deleteUserInfo(@Path("NetName") Long NetName);
 
-    @PUT("/Users/{NetName}")
+    @PUT("Users/{NetName}")
     Call<User> updateUserInfo(@Path("NetName") Long NetName, @Body User UserInfo);
 }

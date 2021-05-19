@@ -3,6 +3,8 @@ package com.example.architectureofconnectapp.ConnectThings;
 
 import com.example.architectureofconnectapp.IPostfromNet;
 
+import java.util.Comparator;
+
 public class ConnectPost extends IPostfromNet {
     private String NameNet;
     private IPostfromNet post;
@@ -19,7 +21,7 @@ public class ConnectPost extends IPostfromNet {
 
 
     private void SettingBuilder(){
-        if(!post.getText().equals("")){
+        if(post.getText()!=null && !post.getText().equals("")){
             settingView.setText(true);
         }
         if(post.getAudio()!=null){
@@ -57,4 +59,6 @@ public class ConnectPost extends IPostfromNet {
     public IPostfromNet getPostElements() {
         return post;
     }
+
+
 }

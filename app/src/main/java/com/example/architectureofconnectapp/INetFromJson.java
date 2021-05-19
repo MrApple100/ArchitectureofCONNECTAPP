@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public interface INetFromJson {
     long id(JSONObject json);
-
+    long datatime(JSONObject json);
     String NameGroup(JSONObject json);
 
     ArrayList<Bitmap> Picture(JSONObject json);

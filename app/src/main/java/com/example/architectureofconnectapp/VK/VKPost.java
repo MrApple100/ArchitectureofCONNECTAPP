@@ -20,6 +20,7 @@ public class VKPost extends IPostfromNet {
         this.repost=vkgetFromJson.repost(VkPostJsonInfo);
         this.comments=vkgetFromJson.comments(VkPostJsonInfo);
         this.views=vkgetFromJson.views(VkPostJsonInfo);
+        this.datatime=vkgetFromJson.datatime(VkPostJsonInfo);
     }
 
 

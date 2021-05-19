@@ -148,7 +148,7 @@
             android:orientation="horizontal"
             android:gravity="center">
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="VK"
@@ -175,6 +175,44 @@
         </LinearLayout>
 
     </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_below="@id/LLshareText">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Twitter"
+                    android:textColor="@color/white"
+                    android:textSize="20dp">
+                </TextView>
+                <TextView
+                    android:id="@+id/Twittername"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="User"
+                    android:textColor="@color/buttonnewconnectpost"
+                    android:textSize="14dp">
+                </TextView>
+                <Switch
+                    android:id="@+id/Twitterswitch"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/MySwitch">
+                </Switch>
+            </LinearLayout>
+
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp">

@@ -23,7 +23,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.LogRecord;
 //каждый метод должен быть в другом потоке, чтобы не загружать основной
 //json - ссылка на пост
@@ -37,6 +39,16 @@ public class VKgetFromJson implements INetFromJson {
             Log.e("Error","id");
         }
         return id;
+    }
+
+    @Override
+    public long datatime(JSONObject json) {
+        long datatime=0l;
+        try {
+            datatime = json.getLong("date");
+        }catch (JSONException e){}
+
+        return datatime;
     }
 
     @Override
@@ -133,8 +145,7 @@ public class VKgetFromJson implements INetFromJson {
     public int views(JSONObject json) {
         int views=0;
         try {
-            System.out.println(json.toString());
-            System.out.println(json.getJSONObject("views"));
+
             views = (json.getJSONObject("views")).getInt("count");
         }catch (JSONException jsonException){
             Log.e("Error","Intviews");
