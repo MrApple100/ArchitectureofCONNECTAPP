@@ -1,7 +1,11 @@
 package com.example.architectureofconnectapp;
 
 import android.graphics.Bitmap;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
+
+import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
 
@@ -9,6 +13,7 @@ import java.util.ArrayList;
 
 public abstract class IPostfromNet {
     protected long id;
+    protected INetFromJson iNetFromJson;
 
     public long getId() {
         return id;
@@ -16,6 +21,7 @@ public abstract class IPostfromNet {
     protected Long datatime;
     protected String NameGroup;
     protected String text;
+    protected ArrayList<String> urlspick=new ArrayList<>();
     protected ArrayList<Bitmap> Picture=new ArrayList<>();
     protected ArrayList<MediaStore.Video> Video=new ArrayList<>();
     protected ArrayList<MediaStore.Audio> Audio=new ArrayList<>();
@@ -33,12 +39,32 @@ public abstract class IPostfromNet {
         return text;
     }
 
-    public ArrayList<Bitmap> getPicture() {
-        return Picture;
+    public INetFromJson getiNetFromJson() {
+        return iNetFromJson;
+    }
+
+    public ArrayList<String> getPicture(Handler handler) {
+        if(handler!=null) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if (Picture.size() == 0)
+                        Picture = iNetFromJson.Picture(NetPostJsonInfo);
+                    Message message = new Message();
+                    message.obj = Picture;
+                    handler.sendMessage(message);
+                }
+            }).start();
+        }
+        return urlspick;
     }
 
     public ArrayList<MediaStore.Video> getVideo() {
         return Video;
+    }
+
+    public ArrayList<String> getUrlspick() {
+        return urlspick;
     }
 
     public ArrayList<MediaStore.Audio> getAudio() {

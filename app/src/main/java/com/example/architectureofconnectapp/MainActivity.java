@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 
 import com.example.architectureofconnectapp.APIforServer.Network;
@@ -51,15 +52,18 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
         instance=this;
         activity=MainActivity.this;
-        new Network().getAll(handler);
+
         handler=new Handler(){
             @Override
             public void handleMessage(@NonNull Message msg) {
                 super.handleMessage(msg);
+
                 new VKEnter().Enter(MainActivity.getActivity());
                 new TwitterEnter().Enter(MainActivity.getActivity());
             }
         };
+        new Network().getAll(handler);
+
         FragmentConnectNewsfeed ConnectNewsFeed = FragmentConnectNewsfeed.getInstance();
         FragmentNavigationPanel NavigationPanel = new FragmentNavigationPanel();
         FragmentManager fm = getSupportFragmentManager();

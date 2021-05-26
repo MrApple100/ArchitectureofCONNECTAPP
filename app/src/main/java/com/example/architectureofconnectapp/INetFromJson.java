@@ -3,6 +3,8 @@ package com.example.architectureofconnectapp;
 import android.graphics.Bitmap;
 import android.provider.MediaStore;
 
+import com.google.gson.JsonObject;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -12,6 +14,8 @@ public interface INetFromJson {
     long id(JSONObject json);
     long datatime(JSONObject json);
     String NameGroup(JSONObject json);
+
+    ArrayList<String> URLSPick(JSONObject json);
 
     ArrayList<Bitmap> Picture(JSONObject json);
 

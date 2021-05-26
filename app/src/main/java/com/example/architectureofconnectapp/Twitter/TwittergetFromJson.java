@@ -43,6 +43,23 @@ public class TwittergetFromJson  implements INetFromJson {
     }
 
     @Override
+    public ArrayList<String> URLSPick(JSONObject json) {
+        ArrayList<String> urls = new ArrayList<>();
+        try {
+            if(json.has("entities")) {
+                JSONArray media = json.getJSONObject("entities").getJSONArray("media");
+                for (int i = 0; i < media.length(); i++) {
+                    if (media.getJSONObject(i).getString("type").equals("photo")) {
+                        urls.add(media.getJSONObject(i).getString("media_url_https").replace("\\/","/"));
+                        System.out.println("USRLL: "+urls.get(i));
+                    }
+                }
+            }
+        }catch (JSONException e){ }
+        return urls;
+    }
+
+    @Override
     public ArrayList<Bitmap> Picture(JSONObject json) {
         ArrayList<String> urls = new ArrayList<>();
         try {

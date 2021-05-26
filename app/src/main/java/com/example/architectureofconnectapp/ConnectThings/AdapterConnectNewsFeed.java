@@ -1,5 +1,10 @@
 package com.example.architectureofconnectapp.ConnectThings;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +25,9 @@ import com.example.architectureofconnectapp.R;
 import com.example.architectureofconnectapp.VK.VKInterection;
 
 import org.json.JSONException;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class AdapterConnectNewsFeed extends PagedListAdapter<ConnectPost, AdapterConnectNewsFeed.ConnectPostViewHolder> {
 
@@ -47,9 +55,17 @@ public class AdapterConnectNewsFeed extends PagedListAdapter<ConnectPost, Adapte
         }else{
             holder.Text.setVisibility(View.GONE);
         }
-        if(connectPost.getPicture().size()!=0) {
+        Handler handler=new Handler(){
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                super.handleMessage(msg);
+                holder.Picture.setAdapter(new AdapterPhotoPlaces(MainActivity.getInstance(),(ArrayList<Bitmap>)msg.obj));
+                ((AdapterPhotoPlaces) holder.Picture.getAdapter()).notifyDataSetChanged();
+            }
+        };
+        if(connectPost.getPicture(handler).size()!=0) {
             holder.Picture.setVisibility(View.VISIBLE);
-            holder.Picture.setAdapter(new AdapterPhotoPlaces(MainActivity.getInstance(),connectPost.getPicture()));
+            holder.Picture.setAdapter(new AdapterPhotoPlaces(MainActivity.getInstance(),new ArrayList<Bitmap>(Arrays.asList(BitmapFactory.decodeResource(MainActivity.getInstance().getResources(),R.drawable.empty)))));
         }else{
             holder.Picture.setVisibility(View.GONE);
         }

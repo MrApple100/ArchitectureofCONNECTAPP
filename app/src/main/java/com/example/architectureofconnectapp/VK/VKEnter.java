@@ -36,7 +36,8 @@ public class VKEnter implements NETLOGIN {
         String[] scope = new String[]{VKScope.FRIENDS,VKScope.GROUPS,VKScope.WALL,VKScope.PHOTOS};
         //String[] fingerprints = VKUtil.getCertificateFingerprint(activity, activity.getPackageName());
         //System.out.println(fingerprints[0]);
-        if(!VKAccessToken.currentToken().hasScope(VKScope.FRIENDS,VKScope.GROUPS,VKScope.WALL,VKScope.PHOTOS) || !Users.getInstance().getUsersofNet().containsKey((long)"VK".hashCode())){
+
+        if(VKAccessToken.currentToken()==null || !VKAccessToken.currentToken().hasScope(VKScope.FRIENDS,VKScope.GROUPS,VKScope.WALL,VKScope.PHOTOS) || Users.getInstance().getUsersofNet().containsKey((long)"VK".hashCode())){
             VKSdk.login(activity,scope);
             Network network=new Network();
             VKApiUsers vkApiUsers=new VKApiUsers();
@@ -48,7 +49,7 @@ public class VKEnter implements NETLOGIN {
                     try {
                         JSONObject jsonUser = response.json.getJSONArray("response").getJSONObject(0);
                         User user1=new User(jsonUser.getString("first_name"),(long)"VK".hashCode(),jsonUser.getString("last_name"));
-                        network.postUserInfo((long)"VK".hashCode(),user1);
+                        network.updateUserInfo((long)"VK".hashCode(),user1);
                     } catch (JSONException jsonException) {
                         jsonException.printStackTrace();
                     }

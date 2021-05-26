@@ -1,6 +1,7 @@
 package com.example.architectureofconnectapp.VK;
 
 import com.example.architectureofconnectapp.IPostfromNet;
+import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
 
@@ -10,10 +11,12 @@ public class VKPost extends IPostfromNet {
     VKPost(JSONObject VkPostJsonInfo){
         VKgetFromJson vkgetFromJson=new VKgetFromJson();
         this.id=vkgetFromJson.id(VkPostJsonInfo);
+        this.iNetFromJson=vkgetFromJson;
         this.NameGroup=vkgetFromJson.NameGroup(VkPostJsonInfo);
         this.NetPostJsonInfo=VkPostJsonInfo;
         this.text=vkgetFromJson.Text(VkPostJsonInfo);
-        this.Picture=vkgetFromJson.Picture(VkPostJsonInfo);
+        this.urlspick=vkgetFromJson.URLSPick(VkPostJsonInfo);
+        //this.Picture=vkgetFromJson.Picture(VkPostJsonInfo);
         this.Video=vkgetFromJson.Video(VkPostJsonInfo);
         this.Audio=vkgetFromJson.Audio(VkPostJsonInfo);
         this.like=vkgetFromJson.like(VkPostJsonInfo);

@@ -30,7 +30,7 @@ public class ConnectPost extends IPostfromNet {
         if(post.getVideo()!=null){
             settingView.setVideo(true);
         }
-        if(post.getPicture()!=null){
+        if(post.getPicture(null)!=null){
             settingView.setPicture(true);
         }
         if(post.getLike()!=0){

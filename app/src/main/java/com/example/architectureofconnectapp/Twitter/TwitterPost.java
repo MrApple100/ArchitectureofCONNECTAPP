@@ -10,11 +10,13 @@ public class TwitterPost extends IPostfromNet {
     public JSONObject jsongroup;
     TwitterPost(JSONObject twitterPostJsonInfo){
         TwittergetFromJson twittergetFromJson=new TwittergetFromJson();
+        this.iNetFromJson=twittergetFromJson;
         this.id=twittergetFromJson.id(twitterPostJsonInfo);
         this.NameGroup=twittergetFromJson.NameGroup(twitterPostJsonInfo);
         this.NetPostJsonInfo=twitterPostJsonInfo;
         this.text=twittergetFromJson.Text(twitterPostJsonInfo);
-        this.Picture=twittergetFromJson.Picture(twitterPostJsonInfo);
+        this.urlspick=twittergetFromJson.URLSPick(twitterPostJsonInfo);
+        //this.Picture=twittergetFromJson.Picture(twitterPostJsonInfo);
         this.Video=twittergetFromJson.Video(twitterPostJsonInfo);
         this.Audio=twittergetFromJson.Audio(twitterPostJsonInfo);
         this.like=twittergetFromJson.like(twitterPostJsonInfo);

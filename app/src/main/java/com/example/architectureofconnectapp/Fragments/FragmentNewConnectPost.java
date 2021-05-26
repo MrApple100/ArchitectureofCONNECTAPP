@@ -98,6 +98,7 @@ public class FragmentNewConnectPost extends Fragment {
             name = Users.getInstance().getUsersofNet().get((long)"Twitter".hashCode()).getFirst_name();
             lastname = Users.getInstance().getUsersofNet().get((long)"Twitter".hashCode()).getLast_name();
         Twittername.setText(name);
+        Twitterswitch=(Switch) view.findViewById(R.id.Twitterswitch);
 
         Cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,10 +125,14 @@ public class FragmentNewConnectPost extends Fragment {
             @Override
             public void onClick(View v) {
                 ConnectPageCreatePost connectPageCreatePost=new ConnectPageCreatePost(TextPlace.getText().toString(), ((AdapterPhotoPlaces) PhotoPlaces.getAdapter()).getBitmapsList());
-                if(VKswitch.isChecked())
+                if(VKswitch.isChecked()) {
+                    Log.d("Post","vk");
                     connectPageCreatePost.SentPost(new VKProcessRequest());
-                if(Twitterswitch.isChecked())
+                }
+                if(Twitterswitch.isChecked()) {
+                    Log.d("Post","tw");
                     connectPageCreatePost.SentPost(new TwitterProcessRequest());
+                }
             }
         });
 

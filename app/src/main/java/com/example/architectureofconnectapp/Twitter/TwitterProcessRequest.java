@@ -123,6 +123,7 @@ public class TwitterProcessRequest implements IProcessNetRequest {
         public void run() {
             super.run();
             try {
+
                 StatusUpdate status=new StatusUpdate(text);
                 if(bitmaps.size()>0) {
                     File file = bitmapToFile(MainActivity.getInstance(), bitmaps.get(0), "photo.png");
@@ -132,7 +133,7 @@ public class TwitterProcessRequest implements IProcessNetRequest {
                     }else{
                         media = twitter.uploadMedia(file);
                     }
-
+                    Log.d("Post",media.getSize()+"");
                     if(media != null) {
                         status.setMediaIds(media.getMediaId());//use this instead of tweet.setMedia(video);
                     }

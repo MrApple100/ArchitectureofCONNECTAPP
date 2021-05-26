@@ -62,6 +62,28 @@ public class VKgetFromJson implements INetFromJson {
         return name;
     }
 
+    @Override
+    public ArrayList<String> URLSPick(JSONObject json) {
+        ArrayList<String> bitmapstring=new ArrayList<>();
+
+        //получаем массив ссылок на картинки
+        try {
+            if (json.has("attachments")) {
+                JSONArray jsonarrayattachments = (JSONArray) json.get("attachments");
+                for(int j=0;j<jsonarrayattachments.length();j++) { ;
+                    JSONObject jsonObject2 = (JSONObject) jsonarrayattachments.get(j);
+                    if(jsonObject2.getString("type").equals("photo")) {
+                        JSONObject jsonObject3 = (JSONObject) jsonObject2.get("photo");
+                        bitmapstring.add(jsonObject3.getString("photo_807"));
+                    }
+                }
+            }
+        }catch(JSONException jsonException){
+            Log.e("Error","in Picture/start");
+        }
+        return bitmapstring;
+    }
+
     public ArrayList<Bitmap> Picture(JSONObject json){
         ArrayList<Bitmap> bitmaps=new ArrayList<>();
         ArrayList<String> bitmapstring=new ArrayList<>();

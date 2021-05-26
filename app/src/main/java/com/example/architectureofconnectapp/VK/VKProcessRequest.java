@@ -102,10 +102,7 @@ public class VKProcessRequest implements IProcessNetRequest {
                 }
             }
         });
-
-
-        File imagefile = bitmapToFile(MainActivity.getInstance().getApplicationContext(),bitmaps.get(0),"someimage.png");
-
+        File imagefile =null;
     handler = new Handler(){
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -159,12 +156,31 @@ public class VKProcessRequest implements IProcessNetRequest {
                 } catch (JSONException jsonException) {
                 jsonException.printStackTrace();
                 }
+            }else{
+                VKRequest vkRequest =new VKRequest("wall.post",VKParameters.from("message",text));
+
+                vkRequest.executeSyncWithListener(new VKRequest.VKRequestListener() {
+                    @Override
+                    public void onComplete(VKResponse response) {
+                        super.onComplete(response);
+                        //получаем id поста
+                        try {
+                            JSONObject jsonresponce = (JSONObject) response.json.get("response");
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
             }
         }
     };
-
+        if(bitmaps.size()>0) {
+            imagefile = bitmapToFile(MainActivity.getInstance().getApplicationContext(), bitmaps.get(0), "someimage.png");
+        }
         SentThread sentThread=new SentThread(url[0],imagefile);
         sentThread.start();
+
     }
 
     public String sentNext_from() {
@@ -223,16 +239,18 @@ public class VKProcessRequest implements IProcessNetRequest {
             super.run();
             MultipartUtility multipart = null;
             List<String> response = null;
-            try {
-                multipart = new MultipartUtility(url, charset);
+            if(uploadFile1!=null) {
+                try {
+                    multipart = new MultipartUtility(url, charset);
 
-                multipart.addFilePart("photo", uploadFile1);
-                //multipart.addFilePart("fileUpload", uploadFile2);
+                    multipart.addFilePart("photo", uploadFile1);
+                    //multipart.addFilePart("fileUpload", uploadFile2);
 
-                response = multipart.finish();
+                    response = multipart.finish();
 
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
             }
             Message msg = new Message();
             msg.obj = response;

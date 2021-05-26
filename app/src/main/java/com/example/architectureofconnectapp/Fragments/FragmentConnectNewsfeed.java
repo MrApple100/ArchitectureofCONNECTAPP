@@ -125,6 +125,7 @@ public class FragmentConnectNewsfeed extends Fragment {
             MySourceFactory mySourceFactory= new MySourceFactory(connectNewsFeed,iProcessNetRequests);
             PagedList.Config config = new PagedList.Config.Builder()
                     .setEnablePlaceholders(false)
+                    .setInitialLoadSizeHint(15)
                     .setPageSize(10)
                     .build();
             pagedListData =new LivePagedListBuilder<>(mySourceFactory,config)
