@@ -107,6 +107,9 @@ public class FragmentNewConnectPost extends Fragment {
                 ((AdapterPhotoPlaces) PhotoPlaces.getAdapter()).setBitmapsList(null);
                 PhotoPlaces.getAdapter().notifyDataSetChanged();
                 TextPlace.setText("");
+                ////////Test
+                FragmentNavigationPanel.navigation.setSelectedItemId(R.id.ToNewsFeed);
+                /////
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 ft.replace(R.id.MainScene,FragmentConnectNewsfeed.getInstance());

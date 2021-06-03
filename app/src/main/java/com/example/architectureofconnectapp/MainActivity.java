@@ -65,7 +65,7 @@ public class MainActivity extends FragmentActivity {
         new Network().getAll(handler);
 
         FragmentConnectNewsfeed ConnectNewsFeed = FragmentConnectNewsfeed.getInstance();
-        FragmentNavigationPanel NavigationPanel = new FragmentNavigationPanel();
+        FragmentNavigationPanel NavigationPanel = FragmentNavigationPanel.getInstance();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.add(R.id.MainScene,ConnectNewsFeed);

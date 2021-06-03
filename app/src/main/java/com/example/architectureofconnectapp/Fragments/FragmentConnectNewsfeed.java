@@ -80,6 +80,12 @@ public class FragmentConnectNewsfeed extends Fragment {
                 refreshend[0] =true;
             }
         };
+
+        ConnectNewsFeed connectNewsFeed = ConnectNewsFeed.getInstance();
+        //Hmm if i delete this down string Newsfeed will be work well
+        connectNewsFeed.deleteforupdate();
+        MyNewsFeedThread myNewsFeedThread = new MyNewsFeedThread();
+        myNewsFeedThread.start();
     }
 
     @Nullable
@@ -106,10 +112,11 @@ public class FragmentConnectNewsfeed extends Fragment {
 
             }
         });
-        ConnectNewsFeed connectNewsFeed = ConnectNewsFeed.getInstance();
-        connectNewsFeed.deleteforupdate();
-        MyNewsFeedThread myNewsFeedThread=new MyNewsFeedThread();
-        myNewsFeedThread.start();
+        System.out.println(ConnectNewsFeed.getInstance().getPosts().size());
+        System.out.println(adapter.getItemCount());
+        if (NewsFeed.getAdapter()==null)
+            NewsFeed.setAdapter(adapter);
+
         return view;
     }
     class MyNewsFeedThread extends Thread {
@@ -177,6 +184,7 @@ public class FragmentConnectNewsfeed extends Fragment {
             public void onChanged(@Nullable PagedList<ConnectPost> connectPosts) {
                 System.out.println("onChanged");
                 adapter.submitList(connectPosts);
+
             }
         });
         NewsFeed.setAdapter(adapter);
