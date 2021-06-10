@@ -48,12 +48,15 @@ public class VKProcessRequest implements IProcessNetRequest {
     String Owner_id;
     String id;
     @Override
-    public ArrayList<ConnectPost> makenextrequest(int count, String next_from) {
+    public ArrayList<ConnectPost> makenextrequest(int count, String next_from,String method) {
         checkNotMain();
         ArrayList<ConnectPost> connectPosts=new ArrayList<>();
-
-        VKRequest vkRequest =new VKRequest("newsfeed.get", VKParameters.from(VKApiConst.COUNT,count,"start_from",next_from,VKApiConst.FILTERS,"post,photos,notes,friends"));
-        vkRequest.executeSyncWithListener(new VKRequest.VKRequestListener() {
+        VKRequest vkRequest =null;
+        if(method.equals("newsfeed")) {
+            vkRequest = new VKRequest("newsfeed.get", VKParameters.from(VKApiConst.COUNT, count, "start_from", next_from, VKApiConst.FILTERS, "post,photos,notes,friends"));
+        }else if(method.equals("userfeed")){
+            vkRequest = new VKRequest("newsfeed.get", VKParameters.from(VKApiConst.COUNT, count, "start_from", next_from, VKApiConst.FILTERS, "post,photos,notes,friends"));
+        }vkRequest.executeSyncWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);

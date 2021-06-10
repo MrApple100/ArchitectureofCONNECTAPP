@@ -11,10 +11,10 @@ import java.util.List;
 
 public class MyPositionalDataSource extends PositionalDataSource<ConnectPost> {
 
-    private final ConnectNewsFeed connectNewsFeed;
+    private final ConnectFeeds connectNewsFeed;
     private final ArrayList<IProcessNetRequest> iProcessNetRequests;
 
-    public MyPositionalDataSource(ConnectNewsFeed connectNewsFeed, ArrayList<IProcessNetRequest> iProcessNetRequests) {
+    public MyPositionalDataSource(ConnectFeeds connectNewsFeed, ArrayList<IProcessNetRequest> iProcessNetRequests) {
         this.connectNewsFeed = connectNewsFeed;
         this.iProcessNetRequests = iProcessNetRequests;
     }

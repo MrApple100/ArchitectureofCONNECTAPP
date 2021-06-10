@@ -4,6 +4,13 @@ import android.app.Activity;
 import android.util.Log;
 
 import com.example.architectureofconnectapp.APIforServer.Network;
+import com.example.architectureofconnectapp.Cash.CreateTables.TableSocialNetwork;
+import com.example.architectureofconnectapp.Cash.CreateTables.TableUser;
+import com.example.architectureofconnectapp.Cash.Daos.DaoSocialNetwork;
+import com.example.architectureofconnectapp.Cash.Daos.DaoUser;
+import com.example.architectureofconnectapp.MainActivity;
+import com.example.architectureofconnectapp.Model.SocialNetwork;
+import com.example.architectureofconnectapp.Model.SocialNetworks;
 import com.example.architectureofconnectapp.Model.User;
 import com.example.architectureofconnectapp.Model.Users;
 import com.example.architectureofconnectapp.NETLOGIN;
@@ -18,18 +25,41 @@ import twitter4j.auth.OAuth2Authorization;
 import twitter4j.conf.ConfigurationBuilder;
 
 public class TwitterEnter implements NETLOGIN {
+
+    //BD for cash Networks AND Users
+    TableSocialNetwork dataBase = (TableSocialNetwork) TableSocialNetwork.getInstance(MainActivity.getInstance(), "database").allowMainThreadQueries().build();
+    DaoSocialNetwork SocialNetworkDao = dataBase.SocialNetworkDao();
+    TableUser dataUser = (TableUser) TableUser.getInstance(MainActivity.getInstance(), "dataUser").allowMainThreadQueries().build();
+    DaoUser UserDao = dataUser.UserDao();
+
+    //connection server to BD
+    Network network=new Network();
     @Override
     public void Enter(Activity activity) {
 
+
         Twitter twitter = TwitterBASE.getinstance().getTwitter();
-        String accessToken = "979306866982318090-qoDYhTuNGfiU4qeD11BCGue3FTGEcRg";
-        String accessTokenSecret = "eBbQBaGwqqG8DA0ZrnPY84jUXfPi1jyQcb2VoxFiKfNqP";
-        AccessToken oathAccessToken = new AccessToken(accessToken, accessTokenSecret);
-        twitter.setOAuthAccessToken(oathAccessToken);
+        // String accessToken = "979306866982318090-qoDYhTuNGfiU4qeD11BCGue3FTGEcRg";
+        // String accessTokenSecret = "eBbQBaGwqqG8DA0ZrnPY84jUXfPi1jyQcb2VoxFiKfNqP";
+        //AccessToken oathAccessToken = new AccessToken(accessToken, accessTokenSecret);
+        //twitter.setOAuthAccessToken(oathAccessToken);
         if(!Users.getInstance().getUsersofNet().containsKey((long)"Twitter".hashCode())) {
+            SocialNetworkDao.update(new SocialNetwork("Twitter"));
             Log.d("TTT","HIII");
             TwitterEnterThread twitterEnterThread = new TwitterEnterThread(twitter);
             twitterEnterThread.start();
+        }else{
+            if(SocialNetworkDao.getByid("Twitter".hashCode())==null){
+                SocialNetworkDao.update(new SocialNetwork("Twitter"));
+            }
+            if(UserDao.getByid((long)"Twitter".hashCode())==null){
+                User user1=Users.getInstance().getUsersofNet().get((long)"Twitter".hashCode());
+                try {
+                    user1.setToken(twitter.getOAuthAccessToken().getToken());
+                    user1.setToken(twitter.getOAuthAccessToken().getTokenSecret());
+                }catch(TwitterException e){}
+                UserDao.update(user1);
+            }
         }
     }
 
@@ -42,7 +72,6 @@ public class TwitterEnter implements NETLOGIN {
         @Override
         public void run() {
             super.run();
-            Network network=new Network();
             twitter4j.User twitteruser= null;
             try {
                 twitteruser = twitter.showUser(twitter.getScreenName());
@@ -50,6 +79,11 @@ public class TwitterEnter implements NETLOGIN {
                 e.printStackTrace();
             }
             User user1=new User(twitteruser.getName(),(long)"Twitter".hashCode(),twitteruser.getScreenName());
+            try {
+                user1.setToken(twitter.getOAuthAccessToken().getToken());
+                user1.setToken(twitter.getOAuthAccessToken().getTokenSecret());
+            }catch(TwitterException e){}
+            UserDao.update(user1);
             network.postUserInfo((long)"Twitter".hashCode(),user1);
         }
     }

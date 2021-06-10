@@ -33,7 +33,7 @@ public class TwitterProcessRequest implements IProcessNetRequest {
     String next_fromtemp="0";
     int count=0;
     @Override
-    public ArrayList<ConnectPost> makenextrequest(int count, String next_from) {
+    public ArrayList<ConnectPost> makenextrequest(int count, String next_from,String method) {
         next_fromtemp=next_from;
         Twitter twitter=TwitterBASE.getinstance().getTwitter();
         ArrayList<ConnectPost> connectPosts=new ArrayList<>();
@@ -56,7 +56,12 @@ public class TwitterProcessRequest implements IProcessNetRequest {
                 paging.setSinceId(Long.parseLong(next_fromtemp));
 
              */
-           ArrayList<Status> statuses = (ArrayList<Status>) twitter.getHomeTimeline(TwitterBASE.getinstance().getPaging());
+            ArrayList<Status> statuses =null;
+            if(method.equals("newsfeed")) {
+                statuses = (ArrayList<Status>) twitter.getHomeTimeline(TwitterBASE.getinstance().getPaging());
+            }else if(method.equals("userfeed")){
+                statuses = (ArrayList<Status>) twitter.getUserTimeline(TwitterBASE.getinstance().getPaging());
+            }
             for (Status status : statuses) {
                 Date date = status.getCreatedAt();
                 long unixTime = (long)date.getTime()/1000;

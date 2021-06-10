@@ -17,6 +17,8 @@ import android.util.Log;
 
 
 import com.example.architectureofconnectapp.APIforServer.Network;
+import com.example.architectureofconnectapp.Cash.CreateTables.TableSocialNetwork;
+import com.example.architectureofconnectapp.Cash.Daos.DaoSocialNetwork;
 import com.example.architectureofconnectapp.ConnectThings.ConnectNewsFeed;
 import com.example.architectureofconnectapp.Fragments.FragmentConnectNewsfeed;
 import com.example.architectureofconnectapp.Fragments.FragmentNavigationPanel;
@@ -63,6 +65,7 @@ public class MainActivity extends FragmentActivity {
             }
         };
         new Network().getAll(handler);
+
 
         FragmentConnectNewsfeed ConnectNewsFeed = FragmentConnectNewsfeed.getInstance();
         FragmentNavigationPanel NavigationPanel = FragmentNavigationPanel.getInstance();

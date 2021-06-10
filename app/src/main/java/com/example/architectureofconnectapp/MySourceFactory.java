@@ -8,9 +8,9 @@ import com.example.architectureofconnectapp.ConnectThings.ConnectPost;
 import java.util.ArrayList;
 
 public class MySourceFactory extends DataSource.Factory<Integer, ConnectPost> {
-    ConnectNewsFeed connectNewsFeed;
+    ConnectFeeds connectNewsFeed;
     ArrayList<IProcessNetRequest> iProcessNetRequests;
-    public MySourceFactory(ConnectNewsFeed connectNewsFeed, ArrayList<IProcessNetRequest> iProcessNetRequests){
+    public MySourceFactory(ConnectFeeds connectNewsFeed, ArrayList<IProcessNetRequest> iProcessNetRequests){
         this.connectNewsFeed=connectNewsFeed;
         this.iProcessNetRequests=iProcessNetRequests;
     }

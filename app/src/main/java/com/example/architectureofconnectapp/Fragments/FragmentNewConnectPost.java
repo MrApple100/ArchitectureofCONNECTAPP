@@ -28,6 +28,9 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.architectureofconnectapp.APIforServer.Network;
+import com.example.architectureofconnectapp.Cash.CreateTables.TableSocialNetwork;
+import com.example.architectureofconnectapp.Cash.CreateTables.TableUser;
+import com.example.architectureofconnectapp.Cash.Daos.DaoUser;
 import com.example.architectureofconnectapp.ConnectThings.AdapterPhotoPlaces;
 import com.example.architectureofconnectapp.ConnectThings.ConnectPageCreatePost;
 
@@ -65,6 +68,9 @@ public class FragmentNewConnectPost extends Fragment {
         }
         return instance;
     }
+    //BD for cash Users
+    TableUser dataUser = (TableUser) TableUser.getInstance(MainActivity.getInstance(), "dataUser").allowMainThreadQueries().build();
+    DaoUser UserDao = dataUser.UserDao();
 
     public FragmentNewConnectPost() {}
 
@@ -89,14 +95,14 @@ public class FragmentNewConnectPost extends Fragment {
         VKname = (TextView) view.findViewById(R.id.VKname);
         String name = null;
         String lastname =null;
-            name = Users.getInstance().getUsersofNet().get((long)"VK".hashCode()).getFirst_name();
-            lastname = Users.getInstance().getUsersofNet().get((long)"VK".hashCode()).getLast_name();
+            name = UserDao.getByid((long)"VK".hashCode()).getFirst_name();
+            lastname = UserDao.getByid((long)"VK".hashCode()).getLast_name();
         VKname.setText(name+" "+lastname);
         VKswitch = (Switch) view.findViewById(R.id.VKswitch);
 
         Twittername = (TextView) view.findViewById(R.id.Twittername);
-            name = Users.getInstance().getUsersofNet().get((long)"Twitter".hashCode()).getFirst_name();
-            lastname = Users.getInstance().getUsersofNet().get((long)"Twitter".hashCode()).getLast_name();
+        name = UserDao.getByid((long)"Twitter".hashCode()).getFirst_name();
+        lastname = UserDao.getByid((long)"Twitter".hashCode()).getLast_name();
         Twittername.setText(name);
         Twitterswitch=(Switch) view.findViewById(R.id.Twitterswitch);
 

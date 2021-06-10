@@ -74,7 +74,7 @@ public class FragmentNavigationPanel extends Fragment {
                     loadFragment(FragmentConnectNewsfeed.getInstance());
                     return true;
                 case R.id.ToProfile:
-                   // loadFragment(NotificationsFragment.newInstance());
+                   loadFragment(FragmentProfile.getInstance());
                     return true;
                 case R.id.ToSearch:
                    // loadFragment(NotificationsFragment.newInstance());
@@ -89,14 +89,12 @@ public class FragmentNavigationPanel extends Fragment {
         public void onNavigationItemReselected(@NonNull MenuItem item) {
             switch (item.getItemId()){
                 case R.id.ToNewsFeed:
-                    //////////   Test
                     if(navigation.getSelectedItemId()==R.id.ToNewsFeed) {
                         if(FragmentConnectNewsfeed.NewsFeed.getChildAdapterPosition(FragmentConnectNewsfeed.NewsFeed.getChildAt(0))!=0)
                             FragmentConnectNewsfeed.NewsFeed.scrollToPosition(1);
                         FragmentConnectNewsfeed.NewsFeed.smoothScrollToPosition(0);
 
                     }
-                    /////////
             }
         }
     };

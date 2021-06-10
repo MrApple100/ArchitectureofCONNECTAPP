@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/backprofile">
+    <LinearLayout
+        android:id="@+id/LLheader"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <LinearLayout
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <ViewFlipper
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            <ImageView
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_gravity="center"
+                android:background="@drawable/roundprofileimage">
+            </ImageView>
+            </ViewFlipper>
+        </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/LLNetworks"
+        android:layout_below="@+id/LLheader"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:background="@color/transparant"
+            android:id="@+id/RWNetworks"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+
+            app:itemIconTint="@color/activepurple"
+            app:itemTextAppearanceActive="@style/BottomNavigationView.Active"
+            app:itemTextAppearanceInactive="@style/BottomNavigationView"
+            app:menu="@menu/nav_networks"
+            >
+        </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/LLposts"
+        android:layout_below="@+id/LLNetworks"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <FrameLayout
+            android:id="@+id/ProfileFeed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </FrameLayout>
+    </LinearLayout>
+</RelativeLayout>
