@@ -16,9 +16,12 @@ public class TwitterPost extends IPostfromNet {
         this.NetPostJsonInfo=twitterPostJsonInfo;
         this.text=twittergetFromJson.Text(twitterPostJsonInfo);
         this.urlspick=twittergetFromJson.URLSPick(twitterPostJsonInfo);
-        //this.Picture=twittergetFromJson.Picture(twitterPostJsonInfo);
-        this.Video=twittergetFromJson.Video(twitterPostJsonInfo);
-        this.Audio=twittergetFromJson.Audio(twitterPostJsonInfo);
+
+               //Picture=twittergetFromJson.Picture(twitterPostJsonInfo);
+                Video=twittergetFromJson.Video(twitterPostJsonInfo);
+                Audio=twittergetFromJson.Audio(twitterPostJsonInfo);
+
+
         this.like=twittergetFromJson.like(twitterPostJsonInfo);
         this.repost=twittergetFromJson.repost(twitterPostJsonInfo);
         this.comments=twittergetFromJson.comments(twitterPostJsonInfo);

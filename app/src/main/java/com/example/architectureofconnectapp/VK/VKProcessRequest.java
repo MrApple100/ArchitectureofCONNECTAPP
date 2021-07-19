@@ -12,9 +12,14 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.architectureofconnectapp.Cash.CreateTables.TableProfileConnectPost;
+import com.example.architectureofconnectapp.Cash.CreateTables.TableUser;
+import com.example.architectureofconnectapp.Cash.Daos.DaoProfileConnectPost;
+import com.example.architectureofconnectapp.Cash.Daos.DaoUser;
 import com.example.architectureofconnectapp.ConnectThings.ConnectPost;
 import com.example.architectureofconnectapp.IProcessNetRequest;
 import com.example.architectureofconnectapp.MainActivity;
+import com.example.architectureofconnectapp.Model.CashConnectPost;
 import com.example.architectureofconnectapp.MultipartUtility;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
@@ -43,6 +48,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VKProcessRequest implements IProcessNetRequest {
+
+
+    TableProfileConnectPost dataConnectProfilefeed = (TableProfileConnectPost) TableProfileConnectPost.getInstance(MainActivity.getInstance(), "CashConnectProfilefeeds").allowMainThreadQueries().build();
+    DaoProfileConnectPost daoProfileConnectPost = dataConnectProfilefeed.ProfileConnectPostDao();
+
+    TableUser dataUser = (TableUser) TableUser.getInstance(MainActivity.getInstance(), "dataUser").allowMainThreadQueries().build();
+    DaoUser UserDao = dataUser.UserDao();
+
     String next_fromtemp="0";
     Handler handler;
     String Owner_id;
@@ -52,40 +65,127 @@ public class VKProcessRequest implements IProcessNetRequest {
         checkNotMain();
         ArrayList<ConnectPost> connectPosts=new ArrayList<>();
         VKRequest vkRequest =null;
+
         if(method.equals("newsfeed")) {
             vkRequest = new VKRequest("newsfeed.get", VKParameters.from(VKApiConst.COUNT, count, "start_from", next_from, VKApiConst.FILTERS, "post,photos,notes,friends"));
-        }else if(method.equals("userfeed")){
-            vkRequest = new VKRequest("newsfeed.get", VKParameters.from(VKApiConst.COUNT, count, "start_from", next_from, VKApiConst.FILTERS, "post,photos,notes,friends"));
-        }vkRequest.executeSyncWithListener(new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                //получаем Connect посты
-                try {
-                    JSONObject jsonresponce = (JSONObject) response.json.get("response");
-                    next_fromtemp=jsonresponce.getString("next_from");
-                    JSONArray jsonitems = (JSONArray) jsonresponce.get("items");
-                    JSONArray jsongroups = (JSONArray) jsonresponce.get("groups");
-                    for (int i = 0; i < jsonitems.length(); i++) {
-                        JSONObject jsonitem = (JSONObject) jsonitems.get(i);
-                        VKPost vkPost=new VKPost(jsonitem);
-                        String idgroup = jsonitem.getString("source_id").substring(1);
-                        for(int j=0;j<jsongroups.length();j++) {
-                            JSONObject jsongroup=(JSONObject) jsongroups.get(j);
-                            if(jsongroup.getString("id").compareTo(idgroup)==0){
-                                vkPost.setNameGroup(jsongroup.getString("name"));
-                                vkPost.setJsongroup(jsongroup);
-                            }
-                        }
-                        ConnectPost connectPost=new ConnectPost(vkPost);
-                        connectPosts.add(connectPost);
-                    }
-                }catch (JSONException jsonException){
-                    Log.e("ERROR","VKProcessRequest");
-                }
-            }
-        });
+            vkRequest.executeSyncWithListener(new VKRequest.VKRequestListener() {
+                @Override
+                public void onError(VKError error) {
+                    super.onError(error);
 
+                    ArrayList<CashConnectPost> cashConnectPosts =(ArrayList<CashConnectPost>) daoProfileConnectPost.getBynetworkandtype("VK".hashCode(),method.hashCode());
+
+                    if(cashConnectPosts.size()<=(Integer.parseInt(next_from)+count)) {
+                        for (int i = cashConnectPosts.size() - Integer.parseInt(next_from) - 1; i >= 0; i--) {
+                            ConnectPost connectPost = new ConnectPost(cashConnectPosts.get(i));
+                            connectPosts.add(connectPost);
+                        }
+                        next_fromtemp=cashConnectPosts.size()+"";
+                    }else {
+
+                        for (int i = cashConnectPosts.size() - Integer.parseInt(next_from) - 1; i >= cashConnectPosts.size() -  (Integer.parseInt(next_from)+count) ; i--) {
+                            ConnectPost connectPost = new ConnectPost(cashConnectPosts.get(i));
+                            connectPosts.add(connectPost);
+
+                        }
+                        next_fromtemp=(Integer.parseInt(next_from)+count)+"";
+                    }
+                    return;
+
+
+                }
+
+                @Override
+                public void onComplete(VKResponse response) {
+                    super.onComplete(response);
+                    //получаем Connect посты
+                    try {
+
+                        JSONObject jsonresponce = (JSONObject) response.json.get("response");
+                        JSONArray jsonitems = (JSONArray) jsonresponce.get("items");
+                        next_fromtemp = jsonresponce.getString("next_from");
+                        JSONArray jsongroups = (JSONArray) jsonresponce.get("groups");
+                        for (int i = 0; i < jsonitems.length(); i++) {
+                            JSONObject jsonitem = (JSONObject) jsonitems.get(i);
+                            VKPost vkPost = new VKPost(jsonitem);
+                            String idgroup = jsonitem.getString("source_id").substring(1);
+                            for (int j = 0; j < jsongroups.length(); j++) {
+                                JSONObject jsongroup = (JSONObject) jsongroups.get(j);
+                                if (jsongroup.getString("id").compareTo(idgroup) == 0) {
+                                    vkPost.setNameGroup(jsongroup.getString("name"));
+                                    vkPost.setJsongroup(jsongroup);
+                                }
+                            }
+                            ConnectPost connectPost = new ConnectPost(vkPost);
+                            connectPosts.add(connectPost);
+                        }
+                    }catch (JSONException jsonException){
+
+
+                    }
+
+                }
+            });
+        }else if(method.equals("userfeed")){
+            vkRequest = new VKRequest("wall.get", VKParameters.from(VKApiConst.COUNT, count,VKApiConst.OFFSET, next_from));
+            vkRequest.executeSyncWithListener(new VKRequest.VKRequestListener() {
+                @Override
+                public void onError(VKError error) {
+                    super.onError(error);
+                    Log.e("TIME","VK"+error);
+                    Log.e("ERROR",connectPosts.size()+"");
+                    ArrayList<CashConnectPost> cashConnectPosts =(ArrayList<CashConnectPost>) daoProfileConnectPost.getBynetworkandtype("VK".hashCode(),method.hashCode());
+                    if(cashConnectPosts.size()<=(Integer.parseInt(next_from)+count)) {
+                        for (int i = cashConnectPosts.size() - Integer.parseInt(next_from) - 1; i >= 0; i--) {
+                            ConnectPost connectPost = new ConnectPost(cashConnectPosts.get(i));
+                            connectPosts.add(connectPost);
+                        }
+                        next_fromtemp=cashConnectPosts.size()+"";
+                    }else {
+
+                        for (int i = cashConnectPosts.size() - Integer.parseInt(next_from) - 1; i >= cashConnectPosts.size() -  (Integer.parseInt(next_from)+count) ; i--) {
+                            ConnectPost connectPost = new ConnectPost(cashConnectPosts.get(i));
+                            connectPosts.add(connectPost);
+
+                        }
+                        next_fromtemp=(Integer.parseInt(next_from)+count)+"";
+                    }
+                    return;
+                }
+
+                @Override
+                public void onComplete(VKResponse response) {
+                    super.onComplete(response);
+
+                    next_fromtemp=(Integer.parseInt(next_from)+count)+" ";
+                    //получаем Connect посты
+                    try {
+                        JSONObject jsonresponce = (JSONObject) response.json.get("response");
+                        JSONArray jsonitems = (JSONArray) jsonresponce.get("items");
+
+                        for (int i = 0; i < jsonitems.length(); i++) {
+                            JSONObject jsonitem = (JSONObject) jsonitems.get(i);
+                            VKPost vkPost = new VKPost(jsonitem);
+                            Log.d("onBind",jsonitem.toString());
+
+                                    vkPost.setNameGroup(UserDao.getByid("VK".hashCode()).getFirst_name()+" "+UserDao.getByid("VK".hashCode()).getLast_name());
+                                    vkPost.setJsongroup(null);
+
+                            ConnectPost connectPost = new ConnectPost(vkPost);
+                            Log.d("onBind", connectPost.getId()+"KLKLKLKL ");
+                            connectPosts.add(connectPost);
+                        }
+                    }catch (JSONException jsonException){
+
+
+                    }
+
+                }
+            });
+        }
+
+
+        Log.e("ERROR","VKR"+connectPosts.size());
         return connectPosts;
     }
 
@@ -187,6 +287,7 @@ public class VKProcessRequest implements IProcessNetRequest {
     }
 
     public String sentNext_from() {
+        Log.e("ERROR","VKsentNext "+next_fromtemp);
         return next_fromtemp;
     }
 

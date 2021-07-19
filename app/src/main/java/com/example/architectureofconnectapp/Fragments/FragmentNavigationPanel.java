@@ -71,7 +71,7 @@ public class FragmentNavigationPanel extends Fragment {
                     loadFragment(FragmentNewConnectPost.getInstance());
                     return true;
                 case R.id.ToNewsFeed:
-                    loadFragment(FragmentConnectNewsfeed.getInstance());
+                    loadFragment(FragmentConnectNews.getInstance());
                     return true;
                 case R.id.ToProfile:
                    loadFragment(FragmentProfile.getInstance());

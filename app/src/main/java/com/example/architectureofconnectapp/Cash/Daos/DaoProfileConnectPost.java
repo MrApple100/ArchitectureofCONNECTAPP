@@ -17,7 +17,10 @@ public interface DaoProfileConnectPost {
     List<CashConnectPost> getAll(int network);
 
     @Query("SELECT * FROM CashConnectPost WHERE id = :id")
-    CashConnectPost getByid(int id);
+    CashConnectPost getByid(long id);
+
+    @Query("SELECT * FROM CashConnectPost WHERE network=:network AND type = :type")
+    List<CashConnectPost> getBynetworkandtype(int network,int type);
 
     @Insert
     void insert(CashConnectPost cashConnectPost);
@@ -25,4 +28,7 @@ public interface DaoProfileConnectPost {
     void update(CashConnectPost cashConnectPost);
     @Delete
     void delete(CashConnectPost cashConnectPost);
+
+    @Query("DELETE FROM CashConnectPost")
+    void deleteall();
 }

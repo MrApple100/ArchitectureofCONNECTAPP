@@ -44,7 +44,7 @@ import java.util.concurrent.Executors;
 
 public class FragmentConnectProfilefeed extends Fragment {
 
-    TableProfileConnectPost dataConnectProfilefeed = (TableProfileConnectPost) TableProfileConnectPost.getInstance(MainActivity.getInstance(), "ConnectProfilefeed").allowMainThreadQueries().build();
+    TableProfileConnectPost dataConnectProfilefeed = (TableProfileConnectPost) TableProfileConnectPost.getInstance(MainActivity.getInstance(), "CashConnectProfilefeeds").allowMainThreadQueries().build();
     DaoProfileConnectPost daoProfileConnectPost = dataConnectProfilefeed.ProfileConnectPostDao();
 
     static HashMap<Integer,FragmentConnectProfilefeed> fragmentConnectProfilefeedArrayList=new HashMap<>();
@@ -83,6 +83,10 @@ public class FragmentConnectProfilefeed extends Fragment {
                     }
                 });
                 ProfileFeed.setAdapter(adapter);
+                System.out.println(ConnectProfilefeed.getInstance(NameProfileNetwork).getPosts().size());
+                System.out.println(adapter.getItemCount());
+                if (ProfileFeed.getAdapter()==null)
+                    ProfileFeed.setAdapter(adapter);
                 refreshend[0] = true;
             }
         };
@@ -120,10 +124,7 @@ public class FragmentConnectProfilefeed extends Fragment {
 
             }
         });
-        System.out.println(ConnectProfilefeed.getInstance(NameProfileNetwork).getPosts().size());
-        System.out.println(adapter.getItemCount());
-        if (ProfileFeed.getAdapter()==null)
-            ProfileFeed.setAdapter(adapter);
+
 
         return view;
     }
@@ -131,7 +132,6 @@ public class FragmentConnectProfilefeed extends Fragment {
         @Override
         public void run() {
             ConnectProfilefeed connectProfilefeed = ConnectProfilefeed.getInstance(NameProfileNetwork);
-            Log.d("SSIIIZZZEEEE:", connectProfilefeed.getPosts().size()+"");
             ArrayList<IProcessNetRequest> iProcessNetRequests=new ArrayList<>();
             if(NameProfileNetwork.equals("VK")){
                 VKProcessRequest vkProcessRequest=new VKProcessRequest();

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+//класс помогающий конвертировать файл в мульти парт форм для отправки на сервер ВК
 public class MultipartUtility {
     private final String boundary;
     private static final String LINE_FEED = "\r\n";

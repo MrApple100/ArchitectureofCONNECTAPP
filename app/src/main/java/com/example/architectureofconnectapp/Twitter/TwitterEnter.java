@@ -8,12 +8,19 @@ import com.example.architectureofconnectapp.Cash.CreateTables.TableSocialNetwork
 import com.example.architectureofconnectapp.Cash.CreateTables.TableUser;
 import com.example.architectureofconnectapp.Cash.Daos.DaoSocialNetwork;
 import com.example.architectureofconnectapp.Cash.Daos.DaoUser;
+import com.example.architectureofconnectapp.ConstModel.ConstNetwork;
+import com.example.architectureofconnectapp.ConstModel.ConstNetworks;
 import com.example.architectureofconnectapp.MainActivity;
 import com.example.architectureofconnectapp.Model.SocialNetwork;
 import com.example.architectureofconnectapp.Model.SocialNetworks;
 import com.example.architectureofconnectapp.Model.User;
 import com.example.architectureofconnectapp.Model.Users;
 import com.example.architectureofconnectapp.NETLOGIN;
+import com.example.architectureofconnectapp.VK.VKEnter;
+import com.example.architectureofconnectapp.VK.VKInterection;
+import com.example.architectureofconnectapp.VK.VKPost;
+import com.example.architectureofconnectapp.VK.VKProcessRequest;
+import com.example.architectureofconnectapp.VK.VKgetFromJson;
 
 import twitter4j.JSONObject;
 import twitter4j.Scopes;
@@ -49,6 +56,9 @@ public class TwitterEnter implements NETLOGIN {
             TwitterEnterThread twitterEnterThread = new TwitterEnterThread(twitter);
             twitterEnterThread.start();
         }else{
+            Log.d("Newsfeed","TTT");
+
+
             if(SocialNetworkDao.getByid("Twitter".hashCode())==null){
                 SocialNetworkDao.update(new SocialNetwork("Twitter"));
             }
@@ -78,13 +88,15 @@ public class TwitterEnter implements NETLOGIN {
             } catch (TwitterException e) {
                 e.printStackTrace();
             }
-            User user1=new User(twitteruser.getName(),(long)"Twitter".hashCode(),twitteruser.getScreenName());
+            User user1=new User(twitteruser.getName().split(" ")[0],(long)"Twitter".hashCode(),twitteruser.getName().split(" ")[1]);
+
             try {
                 user1.setToken(twitter.getOAuthAccessToken().getToken());
                 user1.setToken(twitter.getOAuthAccessToken().getTokenSecret());
             }catch(TwitterException e){}
             UserDao.update(user1);
-            network.postUserInfo((long)"Twitter".hashCode(),user1);
+            //раньше был post
+            network.updateUserInfo((long)"Twitter".hashCode(),user1);
         }
     }
 }

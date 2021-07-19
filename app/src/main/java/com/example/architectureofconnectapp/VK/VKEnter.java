@@ -9,6 +9,8 @@ import com.example.architectureofconnectapp.Cash.CreateTables.TableSocialNetwork
 import com.example.architectureofconnectapp.Cash.CreateTables.TableUser;
 import com.example.architectureofconnectapp.Cash.Daos.DaoSocialNetwork;
 import com.example.architectureofconnectapp.Cash.Daos.DaoUser;
+import com.example.architectureofconnectapp.ConstModel.ConstNetwork;
+import com.example.architectureofconnectapp.ConstModel.ConstNetworks;
 import com.example.architectureofconnectapp.MainActivity;
 import com.example.architectureofconnectapp.Model.SocialNetwork;
 import com.example.architectureofconnectapp.Model.SocialNetworks;
@@ -76,15 +78,17 @@ public class VKEnter implements NETLOGIN {
                         jsonException.printStackTrace();
                     }
 
-
                 }
             });
         }else{
+            Log.d("Newsfeed","VVV");
+
+
             if(SocialNetworkDao.getByid("VK".hashCode())==null){
-                SocialNetworkDao.insert(new SocialNetwork("Twitter"));
+                SocialNetworkDao.insert(new SocialNetwork("VK"));
             }
             if(UserDao.getByid("VK".hashCode())==null || !UserDao.getByid((long)"VK".hashCode()).getToken().equals(VKAccessToken.currentToken().accessToken)){
-                User user1=Users.getInstance().getUsersofNet().get((long)"Twitter".hashCode());
+                User user1=Users.getInstance().getUsersofNet().get((long)"VK".hashCode());
                 user1.setToken(VKAccessToken.currentToken().accessToken);
                 user1.setSecrettoken(VKAccessToken.currentToken().secret);
                 UserDao.insert(user1);

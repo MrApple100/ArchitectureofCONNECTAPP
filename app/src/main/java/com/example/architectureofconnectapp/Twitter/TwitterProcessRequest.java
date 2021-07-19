@@ -1,12 +1,16 @@
 package com.example.architectureofconnectapp.Twitter;
 
 import android.content.Context;
+import android.database.CursorWindow;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.example.architectureofconnectapp.Cash.CreateTables.TableProfileConnectPost;
+import com.example.architectureofconnectapp.Cash.Daos.DaoProfileConnectPost;
 import com.example.architectureofconnectapp.ConnectThings.ConnectPost;
 import com.example.architectureofconnectapp.IProcessNetRequest;
 import com.example.architectureofconnectapp.MainActivity;
+import com.example.architectureofconnectapp.Model.CashConnectPost;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,6 +21,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -30,6 +35,11 @@ import twitter4j.UploadedMedia;
 import twitter4j.json.DataObjectFactory;
 
 public class TwitterProcessRequest implements IProcessNetRequest {
+
+    TableProfileConnectPost dataConnectProfilefeed = (TableProfileConnectPost) TableProfileConnectPost.getInstance(MainActivity.getInstance(), "CashConnectProfilefeeds").allowMainThreadQueries().build();
+    DaoProfileConnectPost daoProfileConnectPost = dataConnectProfilefeed.ProfileConnectPostDao();
+
+
     String next_fromtemp="0";
     int count=0;
     @Override
@@ -49,43 +59,81 @@ public class TwitterProcessRequest implements IProcessNetRequest {
                 next_fromtemp=iii+"";
                 paging.setCount(10);
             }
+
             paging.setPage(Integer.parseInt(next_fromtemp)+1);
             TwitterBASE.getinstance().setPaging(paging);
+
+            next_fromtemp = (Integer.parseInt(next_fromtemp)+1)+"";
             /*
             if(next_fromtemp.compareTo("0")!=0)
                 paging.setSinceId(Long.parseLong(next_fromtemp));
 
              */
             ArrayList<Status> statuses =null;
+
             if(method.equals("newsfeed")) {
                 statuses = (ArrayList<Status>) twitter.getHomeTimeline(TwitterBASE.getinstance().getPaging());
             }else if(method.equals("userfeed")){
                 statuses = (ArrayList<Status>) twitter.getUserTimeline(TwitterBASE.getinstance().getPaging());
             }
-            for (Status status : statuses) {
-                Date date = status.getCreatedAt();
-                long unixTime = (long)date.getTime()/1000;
+            Log.d("OKLMN", "wearehere");
+            Log.d("OKLMN", statuses.size()+"");
 
+                for (Status status : statuses) {
+                    Date date = status.getCreatedAt();
+                    long unixTime = (long) date.getTime() / 1000;
 
-                Log.d("UNIXTIME: ",date+"");
-                Log.d("UNIXTIME: ",unixTime+"");
+                    Log.d("UNIXTIME: ", date + "");
+                    Log.d("UNIXTIME: ", unixTime + "");
 
+                    JSONObject jsonbase = new JSONObject(TwitterObjectFactory.getRawJSON(status));
+                    System.out.println(jsonbase.toString() + "");
+                    //next_fromtemp=jsonbase.getString("id");
+                    twitterPost = new TwitterPost(jsonbase);
 
-                JSONObject jsonbase=new JSONObject(TwitterObjectFactory.getRawJSON(status));
-                System.out.println(jsonbase.toString()+"");
-                //next_fromtemp=jsonbase.getString("id");
-                twitterPost=new TwitterPost(jsonbase);
+                    twitterPost.setJsongroup(jsonbase.getJSONObject("user"));
+                    twitterPost.setNameGroup(jsonbase.getJSONObject("user").getString("name"));
+                    twitterPost.setDatatime(unixTime);
+                    ConnectPost connectPost = new ConnectPost(twitterPost);
+                    connectPosts.add(connectPost);
+                }
 
-                twitterPost.setJsongroup(jsonbase.getJSONObject("user"));
-                twitterPost.setNameGroup(jsonbase.getJSONObject("user").getString("name"));
-                twitterPost.setDatatime(unixTime);
-                ConnectPost connectPost=new ConnectPost(twitterPost);
-                connectPosts.add(connectPost);
-            }
         }catch(TwitterException | JSONException e) {
 
-        }
+            try {
+                Field field = CursorWindow.class.getDeclaredField("sCursorWindowSize");
+                field.setAccessible(true);
+                field.set(null, 100 * 1024 * 1024);//100mb
+            } catch (Exception ee) {
 
+            }
+
+
+            Log.d("OKLMN", "test2");
+            ArrayList<CashConnectPost> cashConnectPosts =(ArrayList<CashConnectPost>) daoProfileConnectPost.getBynetworkandtype("Twitter".hashCode(),method.hashCode());
+            Log.d("OKLMN", method.hashCode()+"");
+            Log.d("OKLMN", cashConnectPosts.size()+"");
+            if(cashConnectPosts.size()<=(Integer.parseInt(next_from)+count)) {
+                for (int i = cashConnectPosts.size() - Integer.parseInt(next_from) - 1; i >= 0; i--) {
+                    ConnectPost connectPost = new ConnectPost(cashConnectPosts.get(i));
+                    connectPosts.add(connectPost);
+                }
+                next_fromtemp=cashConnectPosts.size()+"";
+            }else {
+
+                for (int i = cashConnectPosts.size() - Integer.parseInt(next_from) - 1; i >= cashConnectPosts.size() -  (Integer.parseInt(next_from)+count) ; i--) {
+                    ConnectPost connectPost = new ConnectPost(cashConnectPosts.get(i));
+                    connectPosts.add(connectPost);
+
+                }
+                next_fromtemp=(Integer.parseInt(next_from)+count)+"";
+            }
+            Log.d("OKLMN", connectPosts.size()+"");
+            return connectPosts;
+
+
+        }
+        Log.e("onBind","Twitter"+connectPosts.size());
         return connectPosts;
     }
     public class MakeRequestThread extends Thread {
@@ -101,8 +149,9 @@ public class TwitterProcessRequest implements IProcessNetRequest {
     }
     @Override
     public String sentNext_from() {
-        int iii =Integer.parseInt(next_fromtemp)+1;
-        return iii+"";
+
+        Log.e("sentNext",next_fromtemp);
+        return next_fromtemp;
     }
 
     @Override

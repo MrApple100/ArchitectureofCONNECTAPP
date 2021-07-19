@@ -2,6 +2,7 @@ package com.example.architectureofconnectapp.ConnectThings;
 
 
 import com.example.architectureofconnectapp.IPostfromNet;
+import com.example.architectureofconnectapp.Model.CashConnectPost;
 
 import java.util.Comparator;
 
@@ -9,6 +10,9 @@ public class ConnectPost extends IPostfromNet {
     private String NameNet;
     private IPostfromNet post;
     private SettingView settingView = new SettingView();
+
+
+
     public ConnectPost(IPostfromNet post){
 
         this.id=post.getId();
@@ -19,6 +23,12 @@ public class ConnectPost extends IPostfromNet {
 
     }
 
+    public ConnectPost(CashConnectPost cashConnectPost){
+        this.id=cashConnectPost.getId();
+        this.NameNet=cashConnectPost.getNameNet();
+        this.setCashConnectPost(cashConnectPost);
+        this.NetPostJsonInfo=cashConnectPost.getJSONNetPostJsonInfo();
+    }
 
     private void SettingBuilder(){
         if(post.getText()!=null && !post.getText().equals("")){

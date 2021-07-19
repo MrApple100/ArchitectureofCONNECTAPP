@@ -12,10 +12,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.view.menu.MenuItemImpl;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -41,6 +43,7 @@ import com.example.architectureofconnectapp.MySourceFactory;
 import com.example.architectureofconnectapp.R;
 import com.example.architectureofconnectapp.Twitter.TwitterProcessRequest;
 import com.example.architectureofconnectapp.VK.VKProcessRequest;
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
@@ -55,14 +58,14 @@ import java.util.concurrent.Executors;
 
 public class FragmentProfile extends Fragment {
     private Fragment fragmentinprofilefeed;
+    private String activenameofiteminmenu;
     private static FragmentProfile instance;
 
     public static FragmentProfile getInstance() {
         if (instance == null) {
             instance = new FragmentProfile();
-        } else {
-
-
+        }else {
+            instance.loadlastFragment();
         }
         return instance;
     }
@@ -84,9 +87,9 @@ public class FragmentProfile extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.profile, container, false);
-        BottomNavigationView BNNNetworks = (BottomNavigationView) view.findViewById(R.id.RWNetworks);
-        BNNNetworks.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        Menu menunetworks=BNNNetworks.getMenu();
+        BottomNavigationView BNVNetworks = (BottomNavigationView) view.findViewById(R.id.BNVNetworks);
+        BNVNetworks.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        Menu menunetworks=BNVNetworks.getMenu();
 
         ArrayList<SocialNetwork> socialNetworks=(ArrayList<SocialNetwork>) SocialNetworkDao.getAll();
         for(SocialNetwork socialNetwork:socialNetworks){
@@ -96,13 +99,34 @@ public class FragmentProfile extends Fragment {
         }
 
         HashMap<Integer, FragmentConnectProfilefeed> fragmentConnectProfilefeed=FragmentConnectProfilefeed.getFragmentConnectProfilefeedArrayList();
-        loadFragment(fragmentConnectProfilefeed.get(menunetworks.getItem(0).getTitle().hashCode()));
+        loadFragment(fragmentConnectProfilefeed.get(((String)menunetworks.getItem(0).getTitle()).hashCode()));
+        activenameofiteminmenu=(String)menunetworks.getItem(0).getTitle();
+
+        TextView exit = view.findViewById(R.id.ButExit);
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+                FragmentExit fragmentExit=FragmentExit.getInstance();
+                FragmentNavigationPanel fragmentNavigationPanel= FragmentNavigationPanel.getInstance();
+                if(!fragmentExit.isAdded()) {
+                    ft.add(R.id.MainScene, fragmentExit);
+                }else{
+                    ft.show(fragmentExit);
+                }
+               // ft.hide(fragmentNavigationPanel);
+                ft.commit();
+
+            }
+        });
         return view;
     }
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             String title =(String) item.getTitle();
+            activenameofiteminmenu=title;
             HashMap<Integer, FragmentConnectProfilefeed> fragmentConnectProfilefeed=FragmentConnectProfilefeed.getFragmentConnectProfilefeedArrayList();
             loadFragment(fragmentConnectProfilefeed.get(title.hashCode()));
             return true;
@@ -124,8 +148,11 @@ public class FragmentProfile extends Fragment {
         }
 
             ft.show(fragment);
-
-
         ft.commit();
+    }
+    public void loadlastFragment(){
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        HashMap<Integer, FragmentConnectProfilefeed> fragmentConnectProfilefeed=FragmentConnectProfilefeed.getFragmentConnectProfilefeedArrayList();
+        loadFragment(fragmentConnectProfilefeed.get(activenameofiteminmenu.hashCode()));
     }
 }

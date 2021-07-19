@@ -37,6 +37,12 @@ public class VKgetFromJson implements INetFromJson {
             id=json.getInt("post_id");
         }catch(JSONException e){
             Log.e("Error","id");
+            try {
+                id = json.getInt("id");
+            }catch (JSONException e2){
+
+            }
+            return  id;
         }
         return id;
     }

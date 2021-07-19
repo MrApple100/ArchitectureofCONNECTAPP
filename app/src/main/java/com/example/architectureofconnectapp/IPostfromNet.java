@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 
+import com.example.architectureofconnectapp.Model.CashConnectPost;
 import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 public abstract class IPostfromNet {
     protected long id;
     protected INetFromJson iNetFromJson;
+    private CashConnectPost cashConnectPost;
 
     public long getId() {
         return id;
@@ -30,6 +32,14 @@ public abstract class IPostfromNet {
     protected int repost=0;
     protected int comments=0;
     protected int views=0;
+
+    public void setCashConnectPost(CashConnectPost cashConnectPost) {
+        this.cashConnectPost = cashConnectPost;
+    }
+
+    public CashConnectPost getCashConnectPost() {
+        return cashConnectPost;
+    }
 
     public abstract String getNameNet();
 
@@ -57,6 +67,9 @@ public abstract class IPostfromNet {
             }).start();
         }
         return urlspick;
+    }
+    public ArrayList<Bitmap> getPicture() {
+        return Picture;
     }
 
     public ArrayList<MediaStore.Video> getVideo() {

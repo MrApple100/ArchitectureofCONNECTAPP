@@ -24,6 +24,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.architectureofconnectapp.ConnectThings.AdapterConnectNewsFeed;
 import com.example.architectureofconnectapp.ConnectThings.ConnectNewsFeed;
 import com.example.architectureofconnectapp.ConnectThings.ConnectPost;
+import com.example.architectureofconnectapp.ConstModel.ConstNetwork;
 import com.example.architectureofconnectapp.DiffUtilCallback;
 import com.example.architectureofconnectapp.IProcessNetRequest;
 import com.example.architectureofconnectapp.MainActivity;
@@ -37,7 +38,11 @@ import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 
 public class FragmentConnectNewsfeed extends Fragment {
@@ -49,19 +54,54 @@ public class FragmentConnectNewsfeed extends Fragment {
     static LiveData<PagedList<ConnectPost>> pagedListData;
     static AdapterConnectNewsFeed adapter;
     static Handler handler;
-    private static FragmentConnectNewsfeed instance;
+    private static ArrayList<FragmentConnectNewsfeed> fragmentConnectNewsfeeds=new ArrayList<>();
+    //массив сетей которые сейчас есть в этом фрагменте (только они отображаются)
+    private ArrayList<ConstNetwork> constNetworks=new ArrayList<>();
+    //массив групп,сообществ, или другой контент, который нужно показывать именно в этой соцсети(только они отображаются)
+    private HashMap<Long,ArrayList<Long>> idofgroups=new HashMap<>();
 
-    public static FragmentConnectNewsfeed getInstance() {
-        if (instance == null) {
-            instance = new FragmentConnectNewsfeed();
-        }else {
-            //ConnectNewsFeed connectNewsFeed = ConnectNewsFeed.getInstance();
-            //connectNewsFeed.deleteforupdate();
+    public static FragmentConnectNewsfeed getInstance( ArrayList<ConstNetwork> constNetworks, HashMap<Long,ArrayList<Long>> idofgroups) {
 
+        //проверка на то,есть ли этот фрагмент уже
+        for(FragmentConnectNewsfeed fragmentConnectNewsfeed:fragmentConnectNewsfeeds){
+            if(fragmentConnectNewsfeed.constNetworks!=null) {
+                if (fragmentConnectNewsfeed.constNetworks.containsAll(constNetworks) && fragmentConnectNewsfeed.constNetworks.size() == constNetworks.size()) {
+                    //массив имен сетей групп, которые хотят добавить
+                    //если указан нулевой массив групп, то это newsfeed-ы всех сетей
+                    if (idofgroups == null) {
+                        idofgroups = new HashMap<>();
+                        for (ConstNetwork constNetwork : constNetworks) {
+                            ArrayList<Long> temparray = new ArrayList<>();
+                            temparray.add(0l);
+                            idofgroups.put(constNetwork.idname, temparray);
+                        }
+                    }
+
+                    ArrayList<Long> idsofnet = (ArrayList<Long>) idofgroups.entrySet().stream().map(e -> e.getKey()).collect(Collectors.toList());
+                    for (Long tempid : idsofnet) {
+                        //сравнение групп
+                        if (fragmentConnectNewsfeed.idofgroups != null) {
+                            if (fragmentConnectNewsfeed.idofgroups.get(tempid).containsAll(idofgroups.get(tempid)) && idofgroups.size() == fragmentConnectNewsfeed.idofgroups.size()) {
+                                return fragmentConnectNewsfeed;
+                            }
+                        }
+                    }
+
+                }
+            }
         }
-        return instance;
+        //если не нашлось совпадений
+        FragmentConnectNewsfeed tempinstance = new FragmentConnectNewsfeed( constNetworks,idofgroups);
+        fragmentConnectNewsfeeds.add(tempinstance);
+
+        return tempinstance;
     }
+
     public FragmentConnectNewsfeed() { }
+    private FragmentConnectNewsfeed(ArrayList<ConstNetwork> constNetworks,HashMap<Long,ArrayList<Long>> idofgroups) {
+        this.constNetworks=constNetworks;
+        this.idofgroups=idofgroups;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,6 +117,11 @@ public class FragmentConnectNewsfeed extends Fragment {
                     }
                 });
                 NewsFeed.setAdapter(adapter);
+                System.out.println(ConnectNewsFeed.getInstance().getPosts().size());
+                System.out.println(adapter.getItemCount());
+                if (NewsFeed.getAdapter()==null)
+                    NewsFeed.setAdapter(adapter);
+
                 refreshend[0] =true;
             }
         };
@@ -92,7 +137,7 @@ public class FragmentConnectNewsfeed extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.connectnewsfeed,container,false);
-        NewsFeed=(RecyclerView) view.findViewById(R.id.NewsFeed);
+        NewsFeed=(RecyclerView) view.findViewById(R.id.RWNewsFeed);
         LLswipe=(SwipeRefreshLayout) view.findViewById(R.id.LLswipe);
         LLswipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -112,10 +157,6 @@ public class FragmentConnectNewsfeed extends Fragment {
 
             }
         });
-        System.out.println(ConnectNewsFeed.getInstance().getPosts().size());
-        System.out.println(adapter.getItemCount());
-        if (NewsFeed.getAdapter()==null)
-            NewsFeed.setAdapter(adapter);
 
         return view;
     }
@@ -123,12 +164,11 @@ public class FragmentConnectNewsfeed extends Fragment {
         @Override
         public void run() {
             ConnectNewsFeed connectNewsFeed = ConnectNewsFeed.getInstance();
-            Log.d("SSIIIZZZEEEE:", connectNewsFeed.getPosts().size()+"");
-            VKProcessRequest vkProcessRequest=new VKProcessRequest();
-            TwitterProcessRequest twitterProcessRequest=new TwitterProcessRequest();
+            Log.d("Newsfeed",constNetworks.size()+"");
             ArrayList<IProcessNetRequest> iProcessNetRequests=new ArrayList<>();
-            iProcessNetRequests.add(vkProcessRequest);
-            iProcessNetRequests.add(twitterProcessRequest);
+            for(ConstNetwork constNetwork:constNetworks){
+                iProcessNetRequests.add(constNetwork.iProcessNetRequest);
+            }
             MySourceFactory mySourceFactory= new MySourceFactory(connectNewsFeed,iProcessNetRequests);
             PagedList.Config config = new PagedList.Config.Builder()
                     .setEnablePlaceholders(false)
@@ -140,53 +180,10 @@ public class FragmentConnectNewsfeed extends Fragment {
                     .build();
             DiffUtilCallback diffutilcalback=new DiffUtilCallback();
             adapter = new AdapterConnectNewsFeed(diffutilcalback);
+
             handler.sendEmptyMessage(1);
         }
 
     }
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
-            @Override
-            public void onResult(VKAccessToken res) {
-               // update();
-            }
 
-            @Override
-            public void onError(VKError error) {
-                Toast.makeText(MainActivity.getInstance(),"hiError",Toast.LENGTH_LONG).show();
-            }
-        }))
-            super.onActivityResult(requestCode, resultCode, data);
-
-    }
-    private void update(){
-        ConnectNewsFeed connectNewsFeed = ConnectNewsFeed.getInstance();
-        VKProcessRequest vkProcessRequest=new VKProcessRequest();
-        TwitterProcessRequest twitterProcessRequest=new TwitterProcessRequest();
-        ArrayList<IProcessNetRequest> iProcessNetRequests=new ArrayList<>();
-        iProcessNetRequests.add(vkProcessRequest);
-        iProcessNetRequests.add(twitterProcessRequest);
-        MySourceFactory mySourceFactory= new MySourceFactory(connectNewsFeed,iProcessNetRequests);
-        PagedList.Config config = new PagedList.Config.Builder()
-                .setEnablePlaceholders(false)
-                .setPrefetchDistance(5)
-                .setPageSize(10)
-                .build();
-        pagedListData =new LivePagedListBuilder<>(mySourceFactory,config)
-                .setFetchExecutor(Executors.newSingleThreadExecutor())
-                .build();
-        DiffUtilCallback diffutilcalback=new DiffUtilCallback();
-        adapter = new AdapterConnectNewsFeed(diffutilcalback);
-
-        pagedListData.observe(MainActivity.getActivity(), new Observer<PagedList<ConnectPost>>() {
-            @Override
-            public void onChanged(@Nullable PagedList<ConnectPost> connectPosts) {
-                System.out.println("onChanged");
-                adapter.submitList(connectPosts);
-
-            }
-        });
-        NewsFeed.setAdapter(adapter);
-    }
 }

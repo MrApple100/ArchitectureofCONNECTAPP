@@ -118,7 +118,7 @@ public class FragmentNewConnectPost extends Fragment {
                 /////
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
-                ft.replace(R.id.MainScene,FragmentConnectNewsfeed.getInstance());
+                ft.replace(R.id.MainScene,FragmentConnectNews.getInstance());
                 ft.commit();
                 fm.executePendingTransactions();
             }

@@ -9,10 +9,11 @@
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/LLswipe"
+        android:layout_below="@+id/LLGroups"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/NewsFeed"
+            android:id="@+id/RWNewsFeed"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">

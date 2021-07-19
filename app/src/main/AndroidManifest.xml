@@ -6,6 +6,7 @@
     <application
         android:name=".VK.PageofVKEnter"
         android:usesCleartextTraffic="true"
+        android:largeHeap="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -22,6 +23,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service android:name=".Fragments.authandreg.ServiceAuthetication"
+            android:enabled="true"
+            android:exported="true"/>
     </application>
 
 </manifest>

@@ -16,9 +16,11 @@ public class VKPost extends IPostfromNet {
         this.NetPostJsonInfo=VkPostJsonInfo;
         this.text=vkgetFromJson.Text(VkPostJsonInfo);
         this.urlspick=vkgetFromJson.URLSPick(VkPostJsonInfo);
-        //this.Picture=vkgetFromJson.Picture(VkPostJsonInfo);
-        this.Video=vkgetFromJson.Video(VkPostJsonInfo);
-        this.Audio=vkgetFromJson.Audio(VkPostJsonInfo);
+
+               // Picture=vkgetFromJson.Picture(VkPostJsonInfo);
+                Video=vkgetFromJson.Video(VkPostJsonInfo);
+                Audio=vkgetFromJson.Audio(VkPostJsonInfo);
+
         this.like=vkgetFromJson.like(VkPostJsonInfo);
         this.repost=vkgetFromJson.repost(VkPostJsonInfo);
         this.comments=vkgetFromJson.comments(VkPostJsonInfo);

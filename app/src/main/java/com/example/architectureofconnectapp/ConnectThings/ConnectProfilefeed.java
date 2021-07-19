@@ -1,22 +1,15 @@
 package com.example.architectureofconnectapp.ConnectThings;
 
 import android.graphics.Bitmap;
-import android.os.Handler;
-import android.os.Message;
+
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 
-import com.example.architectureofconnectapp.Cash.CreateTables.TableProfileConnectPost;
 
-import com.example.architectureofconnectapp.Cash.Daos.DaoProfileConnectPost;
-import com.example.architectureofconnectapp.Cash.Daos.DaoUser;
 import com.example.architectureofconnectapp.ConnectFeeds;
-import com.example.architectureofconnectapp.Fragments.FragmentConnectProfilefeed;
+
 import com.example.architectureofconnectapp.IProcessNetRequest;
-import com.example.architectureofconnectapp.MainActivity;
-import com.example.architectureofconnectapp.Model.CashConnectPost;
-import com.google.gson.Gson;
+
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;

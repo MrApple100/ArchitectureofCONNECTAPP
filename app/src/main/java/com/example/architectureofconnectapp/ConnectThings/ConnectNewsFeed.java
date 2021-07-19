@@ -39,6 +39,7 @@ public class ConnectNewsFeed implements ConnectFeeds {
     public void setPosts(ArrayList<IProcessNetRequest> iProcessNetRequests) {
         ArrayList<ConnectPost> posttemps=new ArrayList<>();
         for(int i=0;i<iProcessNetRequests.size();i++) {
+
             posttemps.addAll(iProcessNetRequests.get(i).makenextrequest(Count, next_from.get(i),"newsfeed"));
             //posts.addAll(gettedposts);
             next_from.set(i,iProcessNetRequests.get(i).sentNext_from());
