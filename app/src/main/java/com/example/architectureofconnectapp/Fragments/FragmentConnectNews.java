@@ -16,9 +16,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.architectureofconnectapp.ConstModel.ConstNetwork;
 import com.example.architectureofconnectapp.ConstModel.ConstNetworks;
 import com.example.architectureofconnectapp.MainActivity;
 import com.example.architectureofconnectapp.Model.SocialNetwork;
+import com.example.architectureofconnectapp.Model.SocialNetworks;
 import com.example.architectureofconnectapp.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vk.sdk.VKAccessToken;
@@ -63,13 +65,25 @@ public class FragmentConnectNews extends Fragment {
         Menu menunetworks=BNVGroups.getMenu();
         menunetworks.add("ALL");
         menunetworks.add("+");
-
-
-        FragmentConnectNewsfeed fragmentConnectNewsfeed = FragmentConnectNewsfeed.getInstance(ConstNetworks.getInstance().getALConstNetworks(),null);
+        //выбираем из всех соцсетей только те, которые используются
+        ArrayList<ConstNetwork> constNetwork = ConstNetworks.getInstance().getALConstNetworks();
+        ArrayList<ConstNetwork> usedfromconstNetwork=new ArrayList<>();
+        ArrayList<SocialNetwork> usedsocialnetworks= SocialNetworks.getInstance().getSocialNetworks();
+        for(SocialNetwork s:usedsocialnetworks){
+            for(ConstNetwork c:constNetwork){
+                Log.d("usedsocnet",s.getNameofNetwork()+"/"+c.NameNet);
+                if(s.getNameofNetwork().equals(c.NameNet)){
+                    usedfromconstNetwork.add(c);
+                    break;
+                }
+            }
+        }
+        FragmentConnectNewsfeed fragmentConnectNewsfeed = FragmentConnectNewsfeed.getInstance(usedfromconstNetwork,null);
         FragmentManager fm=getFragmentManager();
         FragmentTransaction ft=fm.beginTransaction();
         ft.add(R.id.MainFrameNewsFeed,fragmentConnectNewsfeed);
-        ft.commit();
+        //ft.commit();
+        ft.commitAllowingStateLoss();
         activefragmentnewsfeed=fragmentConnectNewsfeed;
         return view;
 

@@ -9,11 +9,18 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.example.architectureofconnectapp.Model.AuthAndReg.DataUserReg;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,9 +36,16 @@ public class SpringBootClient {
     private static final Logger logger = LoggerFactory.getLogger(SpringBootClient.class);
     private SpringIdentity identity = null;
     private Map<String,String> headers=new HashMap<>();
+    private static SpringBootClient instance;
 
+    public static SpringBootClient getInstance(){
+        if(instance==null){
+            instance=new SpringBootClient();
+        }
+        return instance;
+    }
 
-    public SpringBootClient() {
+    private SpringBootClient() {
 
     }
 
@@ -60,23 +74,24 @@ public class SpringBootClient {
     //c сервера получаем личность(identity) и возвращаем из метода эту личность (если она авторизована то главный identity она тоже присваивается)
     public Map<String, String> getheaders() {
 
-        try {
-            //отправка get запроса на сервер для получения csrf (токен)
-            Map<String, String> properties = webClient.get();
+            try {
+                //отправка get запроса на сервер для получения csrf (токен)
+                Map<String, String> properties = webClient.get();
 
 
-            String csrf = properties.get("_csrf.token").trim();
-            Log.d("csrf ",csrf);
+                String csrf = properties.get("_csrf.token").trim();
+                Log.d("csrf ", csrf);
 
 
-            headers.put("_csrf", csrf);
-            headers.put("X-XSRF-TOKEN", csrf);
-            headers.put("Cookie", "XSRF-TOKEN=" + csrf + ";JSESSIONID=" + webClient.getSessionId());
-            headers.put("Content-Type", "application/json");
+                headers.put("_csrf", csrf);
+                headers.put("X-XSRF-TOKEN", csrf);
+                headers.put("Cookie", "XSRF-TOKEN=" + csrf + ";JSESSIONID=" + webClient.getSessionId());
+                headers.put("Content-Type", "application/json");
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         System.out.println(headers);
         return headers;
     }
@@ -93,18 +108,44 @@ public class SpringBootClient {
         SpringIdentity identity=null;
             if(headers.size()==0){
                 identity = webClient.post(loginObj, getheaders());
-            }else
+            }else {
                 identity = webClient.post(loginObj, headers);
+                if(identity==null){
+                    System.out.println("repeat");
+                    identity = webClient.post(loginObj, getheaders());
+                }
+            }
+
 
         if(identity!=null) {
-            if (identity.isAuthenticated()) {
+            if (identity.getUser().isActive()) {
+                this.identity = identity;
+            }
+        }
+
+
+
+        return identity;
+    }
+    public SpringIdentity login(String token){
+
+
+        //отправка post запроса на сервер
+        System.out.println("TKN: "+token);
+        SpringIdentity identity=null;
+        if(headers.size()==0){
+            identity = webClient.posttoken(token, getheaders());
+        }else
+            identity = webClient.posttoken(token, headers);
+
+        if(identity!=null) {
+            if (identity.getUser().isActive()) {
                 this.identity = identity;
             }
         }
 
         return identity;
     }
-
     public SpringIdentity postSecured( DataUserReg dataUserReg) {
         Map<String, String> headers = new HashMap<>();
 

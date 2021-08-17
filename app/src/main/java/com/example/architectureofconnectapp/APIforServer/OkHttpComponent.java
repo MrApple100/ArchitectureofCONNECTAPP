@@ -42,7 +42,7 @@ public class OkHttpComponent implements WebClient {
                 .setLenient()
                 .create();
         this.retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.1.7:8080")
+                .baseUrl("http://192.168.43.155:8080")
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(okHttpClient)
@@ -72,7 +72,49 @@ public class OkHttpComponent implements WebClient {
             System.out.println(body.getUsername());
             System.out.println(body.getPassword());
             System.out.println(api.getSpringIdentity(headers,body).request().header("_csrf"));
+            System.out.println(headers);
             retrofit2.Response<SpringIdentity> response =api.getSpringIdentity(headers,body).execute();
+
+            Log.d("request2response","jjj"+response.body());
+            if(response.isSuccessful()) {
+                Log.d("request2responseheader","jkj"+response.headers().get("Set-Cookie"));
+                String header = response.headers().get("Set-Cookie");
+                if(header != null) {
+                    String[] parts = header.split(";");
+                    for(String part : parts) {
+                        String[] pair = part.split("=");
+                        String pair_name = pair[0];
+                        String pair_value = "";
+                        if(pair.length > 1) {
+                            pair_value = pair[1];
+                        }
+                        System.out.println(pair_name);
+                        if(pair_name.equals("XSRF-TOKEN")) {
+                            token = pair_value;
+                        } else if(pair_name.equals("JSESSIONID")) {
+                            sessionId = pair_value;
+                        }
+                    }
+                }
+
+                resp = response.body();
+
+            }
+
+        } catch (IOException e) {
+
+        }
+
+        return resp;
+    }
+    public SpringIdentity posttoken(String tkn, Map<String, String> headers) {
+
+        SpringIdentity resp = null;
+        try {
+            //получение ответа
+            System.out.println(tkn);
+            System.out.println(headers.toString());
+            retrofit2.Response<SpringIdentity> response =api.getSpringIdentitybytoken(headers,tkn).execute();
 
             Log.d("request2response","jjj"+response.body());
             if(response.isSuccessful()) {
@@ -241,4 +283,6 @@ public class OkHttpComponent implements WebClient {
         headers.put("Content-Type", "application/json");
         return post( dataUserReg, headers);
     }
+
+
 }

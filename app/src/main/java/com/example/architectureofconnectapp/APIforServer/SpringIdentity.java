@@ -1,43 +1,53 @@
 package com.example.architectureofconnectapp.APIforServer;
 
+import com.example.architectureofconnectapp.ConnectThings.ConnectUser;
+import com.example.architectureofconnectapp.Model.User;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class SpringIdentity {
-    private String username;
-    private boolean authenticated;
-    private Map<String, String> tokenInfo = new HashMap<>();
+    private Map<String, Object> tokenInfo = new HashMap<>();
+    private ConnectUser user;
+    private String jwt;
+    private String refreshToken;
 
-    public SpringIdentity(String username, boolean authenticated) {
-        this.username = username;
-        this.authenticated = authenticated;
-    }
+
 
     public SpringIdentity() {
 
     }
 
-    public String getUsername() {
-        return username;
+    public ConnectUser getUser() {
+        return user;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUser(ConnectUser user) {
+        this.user = user;
     }
 
-    public boolean isAuthenticated() {
-        return authenticated;
-    }
 
-    public void setAuthenticated(boolean authenticated) {
-        this.authenticated = authenticated;
-    }
-
-    public Map<String, String> getTokenInfo() {
+    public Map<String, Object> getTokenInfo() {
         return tokenInfo;
     }
 
-    public void setTokenInfo(Map<String, String> tokenInfo) {
+    public void setTokenInfo(Map<String, Object> tokenInfo) {
         this.tokenInfo = tokenInfo;
+    }
+
+    public String getRefreshtoken() {
+        return refreshToken;
+    }
+
+    public void setRefreshtoken(String refreshtoken) {
+        this.refreshToken = refreshtoken;
+    }
+
+    public String getJwt() {
+        return jwt;
+    }
+
+    public void setJwt(String jwt) {
+        this.jwt = jwt;
     }
 }

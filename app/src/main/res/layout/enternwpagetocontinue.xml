@@ -118,7 +118,7 @@
             android:layout_weight="1"
             android:textSize="20dp"
             android:textColor="@color/buttonnewsfeed"
-            android:text="Продолжить/Войти в Connect">
+            android:text="Продолжить/Войти в Connect/Закончить">
         </TextView>
     </LinearLayout>
 

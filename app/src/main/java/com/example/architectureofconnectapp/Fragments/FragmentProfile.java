@@ -71,7 +71,7 @@ public class FragmentProfile extends Fragment {
     }
 
     //BD for cash Networks
-    TableSocialNetwork dataBase = (TableSocialNetwork) TableSocialNetwork.getInstance(MainActivity.getInstance(), "database").allowMainThreadQueries().build();
+    TableSocialNetwork dataBase = (TableSocialNetwork) TableSocialNetwork.getInstance(MainActivity.getInstance(), "data1").allowMainThreadQueries().build();
     DaoSocialNetwork SocialNetworkDao = dataBase.SocialNetworkDao();
 
     public FragmentProfile() {
@@ -99,9 +99,10 @@ public class FragmentProfile extends Fragment {
         }
 
         HashMap<Integer, FragmentConnectProfilefeed> fragmentConnectProfilefeed=FragmentConnectProfilefeed.getFragmentConnectProfilefeedArrayList();
-        loadFragment(fragmentConnectProfilefeed.get(((String)menunetworks.getItem(0).getTitle()).hashCode()));
-        activenameofiteminmenu=(String)menunetworks.getItem(0).getTitle();
-
+        if(menunetworks.size()!=0) {
+            loadFragment(fragmentConnectProfilefeed.get(((String) menunetworks.getItem(0).getTitle()).hashCode()));
+            activenameofiteminmenu=(String)menunetworks.getItem(0).getTitle();
+        }
         TextView exit = view.findViewById(R.id.ButExit);
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,8 +152,10 @@ public class FragmentProfile extends Fragment {
         ft.commit();
     }
     public void loadlastFragment(){
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        HashMap<Integer, FragmentConnectProfilefeed> fragmentConnectProfilefeed=FragmentConnectProfilefeed.getFragmentConnectProfilefeedArrayList();
-        loadFragment(fragmentConnectProfilefeed.get(activenameofiteminmenu.hashCode()));
+        if(activenameofiteminmenu!=null) {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            HashMap<Integer, FragmentConnectProfilefeed> fragmentConnectProfilefeed = FragmentConnectProfilefeed.getFragmentConnectProfilefeedArrayList();
+            loadFragment(fragmentConnectProfilefeed.get(activenameofiteminmenu.hashCode()));
+        }
     }
 }

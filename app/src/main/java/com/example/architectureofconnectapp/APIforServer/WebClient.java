@@ -21,6 +21,7 @@ public interface WebClient {
     Map<String,String> get( Map<String, String> headers) throws IOException;
 
     SpringIdentity post( DataUserReg body, Map<String, String> headers);
+    SpringIdentity posttoken( String tkn, Map<String, String> headers);
 
     String getToken();
     String getSessionId();

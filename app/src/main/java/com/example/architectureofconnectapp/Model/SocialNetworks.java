@@ -2,7 +2,7 @@ package com.example.architectureofconnectapp.Model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
+//соцсети которыми пользуется пользователь тут!!!
 public class SocialNetworks {
     static SocialNetworks instance;
     private ArrayList<SocialNetwork> SocialNetworks=new ArrayList<>();
@@ -26,5 +26,9 @@ public class SocialNetworks {
     public void addSocialNetwork(SocialNetwork socialNetwork) {
 
         SocialNetworks.add(socialNetwork);
+    }
+    public void addSocialNetwork(String networkname, String token) {
+
+        SocialNetworks.add(new SocialNetwork(networkname,token));
     }
 }

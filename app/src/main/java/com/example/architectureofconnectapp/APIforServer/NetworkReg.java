@@ -54,13 +54,13 @@ public class NetworkReg {
                 .setLenient()
                 .create();
         this.retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.1.7:8080")
+                .baseUrl("http://192.168.43.155:8080")
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(okHttpClient)
                 .build();
 
-        client = new SpringBootClient();
+        client = SpringBootClient.getInstance();
         new Thread(new Runnable() {
             @Override
             public void run() {

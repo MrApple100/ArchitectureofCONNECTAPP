@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.stream.Collectors;
-
+//Все соцсети которые есть в приложении тут!!!
 public class ConstNetworks {
     private static ConstNetworks instance;
 

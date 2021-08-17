@@ -8,33 +8,19 @@ import com.example.architectureofconnectapp.Cash.CreateTables.TableSocialNetwork
 import com.example.architectureofconnectapp.Cash.CreateTables.TableUser;
 import com.example.architectureofconnectapp.Cash.Daos.DaoSocialNetwork;
 import com.example.architectureofconnectapp.Cash.Daos.DaoUser;
-import com.example.architectureofconnectapp.ConstModel.ConstNetwork;
-import com.example.architectureofconnectapp.ConstModel.ConstNetworks;
 import com.example.architectureofconnectapp.MainActivity;
 import com.example.architectureofconnectapp.Model.SocialNetwork;
-import com.example.architectureofconnectapp.Model.SocialNetworks;
 import com.example.architectureofconnectapp.Model.User;
 import com.example.architectureofconnectapp.Model.Users;
 import com.example.architectureofconnectapp.NETLOGIN;
-import com.example.architectureofconnectapp.VK.VKEnter;
-import com.example.architectureofconnectapp.VK.VKInterection;
-import com.example.architectureofconnectapp.VK.VKPost;
-import com.example.architectureofconnectapp.VK.VKProcessRequest;
-import com.example.architectureofconnectapp.VK.VKgetFromJson;
 
-import twitter4j.JSONObject;
-import twitter4j.Scopes;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
-import twitter4j.auth.AccessToken;
-import twitter4j.auth.OAuth2Authorization;
-import twitter4j.conf.ConfigurationBuilder;
 
 public class TwitterEnter implements NETLOGIN {
 
     //BD for cash Networks AND Users
-    TableSocialNetwork dataBase = (TableSocialNetwork) TableSocialNetwork.getInstance(MainActivity.getInstance(), "database").allowMainThreadQueries().build();
+    TableSocialNetwork dataBase = (TableSocialNetwork) TableSocialNetwork.getInstance(MainActivity.getInstance(), "data1").allowMainThreadQueries().build();
     DaoSocialNetwork SocialNetworkDao = dataBase.SocialNetworkDao();
     TableUser dataUser = (TableUser) TableUser.getInstance(MainActivity.getInstance(), "dataUser").allowMainThreadQueries().build();
     DaoUser UserDao = dataUser.UserDao();
@@ -51,7 +37,7 @@ public class TwitterEnter implements NETLOGIN {
         //AccessToken oathAccessToken = new AccessToken(accessToken, accessTokenSecret);
         //twitter.setOAuthAccessToken(oathAccessToken);
         if(!Users.getInstance().getUsersofNet().containsKey((long)"Twitter".hashCode())) {
-            SocialNetworkDao.update(new SocialNetwork("Twitter"));
+            SocialNetworkDao.update(new SocialNetwork("Twitter",null));
             Log.d("TTT","HIII");
             TwitterEnterThread twitterEnterThread = new TwitterEnterThread(twitter);
             twitterEnterThread.start();
@@ -60,7 +46,7 @@ public class TwitterEnter implements NETLOGIN {
 
 
             if(SocialNetworkDao.getByid("Twitter".hashCode())==null){
-                SocialNetworkDao.update(new SocialNetwork("Twitter"));
+                SocialNetworkDao.update(new SocialNetwork("Twitter",null));
             }
             if(UserDao.getByid((long)"Twitter".hashCode())==null){
                 User user1=Users.getInstance().getUsersofNet().get((long)"Twitter".hashCode());

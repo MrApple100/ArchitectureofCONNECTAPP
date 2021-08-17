@@ -19,6 +19,8 @@ import com.example.architectureofconnectapp.ConnectThings.AdapterNetsforExit;
 import com.example.architectureofconnectapp.ConstModel.ConstNetwork;
 import com.example.architectureofconnectapp.ConstModel.ConstNetworks;
 import com.example.architectureofconnectapp.MainActivity;
+import com.example.architectureofconnectapp.Model.SocialNetwork;
+import com.example.architectureofconnectapp.Model.SocialNetworks;
 import com.example.architectureofconnectapp.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -47,8 +49,9 @@ public class FragmentExit extends Fragment {
         View view = inflater.inflate(R.layout.exit, container, false);
 
         RecyclerView netsforexit = view.findViewById(R.id.RWNetsforExit);
+        ArrayList<SocialNetwork> socialNetworks = SocialNetworks.getInstance().getSocialNetworks();
         ArrayList<ConstNetwork> constNetworks = ConstNetworks.getInstance().getALConstNetworks();
-        netsforexit.setAdapter(new AdapterNetsforExit(MainActivity.getInstance(), constNetworks));
+        netsforexit.setAdapter(new AdapterNetsforExit(MainActivity.getInstance(),socialNetworks,constNetworks));
 
         TextView cancel = view.findViewById(R.id.CancelExit);
         cancel.setOnClickListener(new View.OnClickListener() {

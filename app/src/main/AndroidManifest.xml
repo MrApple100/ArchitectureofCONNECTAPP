@@ -23,9 +23,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".Fragments.authandreg.ServiceAuthetication"
-            android:enabled="true"
-            android:exported="true"/>
     </application>
 
 </manifest>
