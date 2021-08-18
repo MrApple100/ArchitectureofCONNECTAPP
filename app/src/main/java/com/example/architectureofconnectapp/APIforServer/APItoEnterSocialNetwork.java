@@ -18,8 +18,11 @@ import retrofit2.http.Path;
 public interface APItoEnterSocialNetwork {
 
 
-        @POST("/EnterToSocialNetwork")
+        @POST("/EnterToSocialNetwork/login")
         Call<SpringIdentity> Enter(@HeaderMap Map<String,String> headers, @Body RequestEntertoSocialNetwork requestEntertoSocialNetwork);
+
+        @POST("/EnterToSocialNetwork/logout")
+        Call<SpringIdentity> Exit(@HeaderMap Map<String,String> headers, @Body RequestEntertoSocialNetwork requestEntertoSocialNetwork);
 
 
 }

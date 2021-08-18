@@ -52,19 +52,42 @@ public class NetworkToEnterSocialNetwork {
         this.api = retrofit.create(APItoEnterSocialNetwork.class);
     }
 
-    public void Enter(String nameNet,String accesstokenofanothersn) {
+    public void Enter(String nameNet,String accesstokenofanothersn,Long id) {
         Log.d("TTT2",client.getheaders()+" "+nameNet);
         RequestEntertoSocialNetwork requestEntertoSocialNetwork=new RequestEntertoSocialNetwork(client.getIdentity().getJwt(),nameNet,accesstokenofanothersn);
         api.Enter(client.getheaders(),requestEntertoSocialNetwork).enqueue(new Callback<SpringIdentity>() {
             @Override
             public void onResponse(Call<SpringIdentity> call, Response<SpringIdentity> response) {
                 Toast.makeText(MainActivity.getInstance(),"ok3: "+response+"",Toast.LENGTH_LONG).show();
-                SpringIdentity identity= response.body();
+                SpringIdentity identity = response.body();
                 SpringBootClient.getInstance().setIdentity(identity);
                 SocialNetworks socialNetworks=SocialNetworks.getInstance();
                 for (Token tkn : identity.getUser().getTokens()) {
                     socialNetworks.addSocialNetwork(tkn.getNetworkname(), tkn.getToken());
                 }
+
+                Log.d("TTT2",response.body()+"");
+            }
+            @Override
+            public void onFailure(Call<SpringIdentity> call, Throwable t) {
+                //сделать обработку всех ошибок и исключений в одном файле
+                //в частности сделать обработку старого токена
+                //код можно взять из mainactivity
+                Toast.makeText(MainActivity.getInstance(),"bad: "+t+"",Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+    public void Exit(String nameNet,String accesstokenofanothersn,Long id) {
+        Log.d("TTT2",client.getheaders()+" "+nameNet);
+        RequestEntertoSocialNetwork requestEntertoSocialNetwork=new RequestEntertoSocialNetwork(client.getIdentity().getJwt(),nameNet,accesstokenofanothersn);
+        api.Exit(client.getheaders(),requestEntertoSocialNetwork).enqueue(new Callback<SpringIdentity>() {
+            @Override
+            public void onResponse(Call<SpringIdentity> call, Response<SpringIdentity> response) {
+                Toast.makeText(MainActivity.getInstance(),"ok3: "+response+"",Toast.LENGTH_LONG).show();
+                SpringIdentity identity = response.body();
+                SpringBootClient.getInstance().setIdentity(identity);
+                SocialNetworks socialNetworks=SocialNetworks.getInstance();
+                socialNetworks.deleteSocialNetworkByNameofNetwork(nameNet);
 
                 Log.d("TTT2",response.body()+"");
             }

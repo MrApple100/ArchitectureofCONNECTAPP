@@ -18,10 +18,13 @@ import com.example.architectureofconnectapp.NETLOGIN;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
+import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.httpClient.VKMultipartEntity;
 import com.vk.sdk.api.methods.VKApiUsers;
+import com.vk.sdk.api.model.VKApiUser;
+import com.vk.sdk.api.model.VKApiUserFull;
 import com.vk.sdk.util.VKUtil;
 
 import org.json.JSONException;
@@ -46,7 +49,6 @@ public class VKEnter implements NETLOGIN {
             Log.d("TOKEN",UserDao.getByid((long)"VK".hashCode()).getToken()+" / "+VKAccessToken.currentToken().accessToken);
             VKSdk.login(activity,scope);
 
-
             Network network=new Network();
             VKApiUsers vkApiUsers=new VKApiUsers();
             vkApiUsers.get().executeWithListener(new VKRequest.VKRequestListener() {
@@ -56,15 +58,18 @@ public class VKEnter implements NETLOGIN {
 
                     try {
                         JSONObject jsonUser = response.json.getJSONArray("response").getJSONObject(0);
+                        Log.d("VkUserjson",jsonUser.toString());
                         User user1=new User(jsonUser.getString("first_name"),(long)"VK".hashCode(),jsonUser.getString("last_name"));
                         user1.setToken(VKAccessToken.currentToken().accessToken);
                         user1.setSecrettoken(VKAccessToken.currentToken().secret);
                         UserDao.update(user1);
                         network.updateUserInfo((long)"VK".hashCode(),user1);
+                        (new NetworkToEnterSocialNetwork()).Enter("VK",VKAccessToken.currentToken().accessToken,(long)"VK".hashCode());
                     } catch (JSONException jsonException) {
                         jsonException.printStackTrace();
                     }
-                    (new NetworkToEnterSocialNetwork()).Enter("VK",VKAccessToken.currentToken().accessToken);
+
+
 
                 }
             });
@@ -84,5 +89,9 @@ public class VKEnter implements NETLOGIN {
                 Log.d("TOKEN", UserDao.getByid((long)"VK".hashCode()).getToken()+" / "+VKAccessToken.currentToken().accessToken);
             }
         }
+    }
+
+    public void Exit() {
+        (new NetworkToEnterSocialNetwork()).Exit("VK", VKAccessToken.currentToken().accessToken,(long)"VK".hashCode());
     }
 }

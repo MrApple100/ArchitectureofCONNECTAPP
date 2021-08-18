@@ -21,6 +21,7 @@ import com.example.architectureofconnectapp.Model.User;
 import com.example.architectureofconnectapp.Model.Users;
 import com.example.architectureofconnectapp.R;
 import com.example.architectureofconnectapp.VK.VKEnter;
+import com.vk.sdk.VKAccessToken;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,7 +52,7 @@ public class AdapterNetsforExit extends RecyclerView.Adapter<AdapterNetsforExit.
             Log.d("unknownusers", Users.getInstance().getUsersofNet().keySet().toString());
             Log.d("unknownusers", usednetworks.toString());
             Log.d("unknownusers", constnetworks.toString());
-            Log.d("unknown",String.valueOf(usednetworks.get(position).getId()));
+            //Log.d("unknown",String.valueOf(usednetworks.get(position).getId()));
             User user = Users.getInstance().getUsersofNet().get(constnetworks.get(position).getidname());
             if (user != null) {
                 holder.user.setText(user.getFirst_name() + " " + user.getLast_name());
@@ -68,6 +69,16 @@ public class AdapterNetsforExit extends RecyclerView.Adapter<AdapterNetsforExit.
             if(tf) {
                 holder.ButExit.setText("Exit");
                 holder.ButExit.setTextColor(MainActivity.getActivity().getColor(R.color.red));
+                holder.ButExit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (constnetworks.get(position).NameNet == "VK") {
+                            new VKEnter().Exit();
+                        }
+                    }
+                });
+
+
             }else {
                 holder.ButExit.setText("Add");
                 holder.ButExit.setTextColor(MainActivity.getActivity().getColor(R.color.teal_200));

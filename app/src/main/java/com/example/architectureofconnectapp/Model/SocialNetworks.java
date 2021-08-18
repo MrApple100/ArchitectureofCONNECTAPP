@@ -31,4 +31,10 @@ public class SocialNetworks {
 
         SocialNetworks.add(new SocialNetwork(networkname,token));
     }
+    public void deleteAllSocialNetworks(){
+        SocialNetworks.clear();
+    }
+    public void deleteSocialNetworkByNameofNetwork(String NameofNetwork){
+        SocialNetworks.removeIf(sn ->{if(sn.getNameofNetwork().equals(NameofNetwork)){return true;}else{return false;}});
+    }
 }
