@@ -20,6 +20,7 @@ import com.example.architectureofconnectapp.Model.SocialNetwork;
 import com.example.architectureofconnectapp.Model.User;
 import com.example.architectureofconnectapp.Model.Users;
 import com.example.architectureofconnectapp.R;
+import com.example.architectureofconnectapp.Twitter.TwitterEnter;
 import com.example.architectureofconnectapp.VK.VKEnter;
 import com.vk.sdk.VKAccessToken;
 
@@ -87,6 +88,9 @@ public class AdapterNetsforExit extends RecyclerView.Adapter<AdapterNetsforExit.
                     public void onClick(View v) {
                         if (constnetworks.get(position).NameNet == "VK") {
                             new VKEnter().Enter(MainActivity.getActivity());
+                        }
+                        if(constnetworks.get(position).NameNet == "Twitter"){
+                            new TwitterEnter().Enter(MainActivity.getActivity());
                         }
                     }
                 });

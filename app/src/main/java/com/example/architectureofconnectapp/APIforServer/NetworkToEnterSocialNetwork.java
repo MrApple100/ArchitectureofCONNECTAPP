@@ -52,9 +52,9 @@ public class NetworkToEnterSocialNetwork {
         this.api = retrofit.create(APItoEnterSocialNetwork.class);
     }
 
-    public void Enter(String nameNet,String accesstokenofanothersn,Long id) {
+    public void Enter(String nameNet,String accesstokenofanothersn,String jsonuser) {
         Log.d("TTT2",client.getheaders()+" "+nameNet);
-        RequestEntertoSocialNetwork requestEntertoSocialNetwork=new RequestEntertoSocialNetwork(client.getIdentity().getJwt(),nameNet,accesstokenofanothersn);
+        RequestEntertoSocialNetwork requestEntertoSocialNetwork=new RequestEntertoSocialNetwork(client.getIdentity().getJwt(),nameNet,accesstokenofanothersn,jsonuser);
         api.Enter(client.getheaders(),requestEntertoSocialNetwork).enqueue(new Callback<SpringIdentity>() {
             @Override
             public void onResponse(Call<SpringIdentity> call, Response<SpringIdentity> response) {
@@ -77,9 +77,9 @@ public class NetworkToEnterSocialNetwork {
             }
         });
     }
-    public void Exit(String nameNet,String accesstokenofanothersn,Long id) {
+    public void Exit(String nameNet,String accesstokenofanothersn,String jsonuser) {
         Log.d("TTT2",client.getheaders()+" "+nameNet);
-        RequestEntertoSocialNetwork requestEntertoSocialNetwork=new RequestEntertoSocialNetwork(client.getIdentity().getJwt(),nameNet,accesstokenofanothersn);
+        RequestEntertoSocialNetwork requestEntertoSocialNetwork=new RequestEntertoSocialNetwork(client.getIdentity().getJwt(),nameNet,accesstokenofanothersn,jsonuser);
         api.Exit(client.getheaders(),requestEntertoSocialNetwork).enqueue(new Callback<SpringIdentity>() {
             @Override
             public void onResponse(Call<SpringIdentity> call, Response<SpringIdentity> response) {

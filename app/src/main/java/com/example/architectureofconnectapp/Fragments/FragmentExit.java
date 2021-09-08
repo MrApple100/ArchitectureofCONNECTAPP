@@ -1,5 +1,6 @@
 package com.example.architectureofconnectapp.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,9 +23,13 @@ import com.example.architectureofconnectapp.MainActivity;
 import com.example.architectureofconnectapp.Model.SocialNetwork;
 import com.example.architectureofconnectapp.Model.SocialNetworks;
 import com.example.architectureofconnectapp.R;
+import com.example.architectureofconnectapp.Twitter.TwitterBASE;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
+
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
 
 public class FragmentExit extends Fragment {
     private static FragmentExit instance;
@@ -87,5 +92,21 @@ public class FragmentExit extends Fragment {
         FragmentNavigationPanel fragmentNavigationPanel=FragmentNavigationPanel.getInstance();
         ft.hide(instance);
         ft.commit();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d("resultCode",resultCode+"");
+
+        if(resultCode==-1){
+            TwitterBASE twitterBASE=TwitterBASE.getinstance();
+            Twitter twitter=twitterBASE.getTwitter();
+            try {
+                Log.d("success",twitter.getScreenName());
+            } catch (TwitterException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

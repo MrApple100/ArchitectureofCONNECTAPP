@@ -40,7 +40,8 @@ public class Network {
                 Gson gson=new Gson();
                 Users.getInstance().setUsersofNet((HashMap<Long, User>) response.body());
                 Log.d("TTT",response.body()+"");
-                Log.d("TTTG",Users.getInstance().getUsersofNet().get((long)"VK".hashCode()).getLast_name()+" "+"Twitter".hashCode());
+                if(Users.getInstance().getUsersofNet().size()!=0)
+                    Log.d("TTTG",Users.getInstance().getUsersofNet().get((long)"VK".hashCode()).getLast_name()+" "+"Twitter".hashCode());
                 if(handler!=null) {
                     handler.sendEmptyMessage(1);
                 }

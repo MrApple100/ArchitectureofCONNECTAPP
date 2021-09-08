@@ -67,7 +67,7 @@ public class VKProcessRequest implements IProcessNetRequest {
         VKRequest vkRequest =null;
 
         if(method.equals("newsfeed")) {
-            vkRequest = new VKRequest("newsfeed.get", VKParameters.from(VKApiConst.COUNT, count, "start_from", next_from, VKApiConst.FILTERS, "post,photos,notes,friends"));
+            vkRequest = new VKRequest("newsfeed.get", VKParameters.from(VKApiConst.COUNT, count, "start_from", next_from, VKApiConst.FILTERS, "post,photos,notes,friends",VKApiConst.VERSION,"5.131"));
             vkRequest.executeSyncWithListener(new VKRequest.VKRequestListener() {
                 @Override
                 public void onError(VKError error) {
@@ -127,7 +127,7 @@ public class VKProcessRequest implements IProcessNetRequest {
                 }
             });
         }else if(method.equals("userfeed")){
-            vkRequest = new VKRequest("wall.get", VKParameters.from(VKApiConst.COUNT, count,VKApiConst.OFFSET, next_from));
+            vkRequest = new VKRequest("wall.get", VKParameters.from(VKApiConst.COUNT, count,VKApiConst.OFFSET, next_from,VKApiConst.VERSION,"5.131"));
             vkRequest.executeSyncWithListener(new VKRequest.VKRequestListener() {
                 @Override
                 public void onError(VKError error) {
@@ -191,7 +191,7 @@ public class VKProcessRequest implements IProcessNetRequest {
 
     public void SentPost(String text, ArrayList<Bitmap> bitmaps){
         final URL[] url = new URL[1];
-        VKRequest vkIDServer =new VKRequest("photos.getWallUploadServer");
+        VKRequest vkIDServer =new VKRequest("photos.getWallUploadServer",VKParameters.from(VKApiConst.VERSION,"5.131"));
         vkIDServer.executeSyncWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
@@ -217,7 +217,7 @@ public class VKProcessRequest implements IProcessNetRequest {
                 try {
                     jsonresponse = new JSONObject(strjson.get(0));
 
-                    VKRequest vkphotoRequest =new VKRequest("photos.saveWallPhoto",VKParameters.from("server",jsonresponse.getString("server"),"photo",jsonresponse.getString("photo"),"hash",jsonresponse.getString("hash")));
+                    VKRequest vkphotoRequest =new VKRequest("photos.saveWallPhoto",VKParameters.from("server",jsonresponse.getString("server"),"photo",jsonresponse.getString("photo"),"hash",jsonresponse.getString("hash"),VKApiConst.VERSION,"5.131"));
                     vkphotoRequest.executeSyncWithListener((new VKRequest.VKRequestListener() {
                         @Override
                         public void onComplete(VKResponse response) {
@@ -241,7 +241,7 @@ public class VKProcessRequest implements IProcessNetRequest {
 
                         }
                     }));
-                    VKRequest vkRequest =new VKRequest("wall.post",VKParameters.from("message",text,"attachments","photo"+Owner_id+"_"+id));
+                    VKRequest vkRequest =new VKRequest("wall.post",VKParameters.from("message",text,"attachments","photo"+Owner_id+"_"+id,VKApiConst.VERSION,"5.131"));
 
                     vkRequest.executeSyncWithListener(new VKRequest.VKRequestListener() {
                         @Override

@@ -23,7 +23,7 @@ public class VKInterection implements IInterection {
         }catch(JSONException e){
 
         }
-        VKRequest vkRequest =new VKRequest("likes.add", VKParameters.from("type","post",VKApiConst.OWNER_ID,source_id,"item_id",Post_id));
+        VKRequest vkRequest =new VKRequest("likes.add", VKParameters.from("type","post",VKApiConst.OWNER_ID,source_id,"item_id",Post_id,VKApiConst.VERSION,"5.131"));
         System.out.println("REQUEST: "+vkRequest.toString());
         vkRequest.executeWithListener(new VKRequest.VKRequestListener() {
             @Override

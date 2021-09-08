@@ -4,11 +4,13 @@ public class RequestEntertoSocialNetwork {
     String accesstoken;
     String nameofSocialNetwork;
     String accesstokenofanothersn;
+    String jsonuser;
 
-    public RequestEntertoSocialNetwork(String accesstoken, String nameofSocialNetwork, String accesstokenofanothersn) {
+    public RequestEntertoSocialNetwork(String accesstoken, String nameofSocialNetwork, String accesstokenofanothersn,String jsonuser) {
         this.accesstoken = accesstoken;
         this.nameofSocialNetwork = nameofSocialNetwork;
         this.accesstokenofanothersn = accesstokenofanothersn;
+        this.jsonuser=jsonuser;
     }
 
     public String getAccesstoken() {
@@ -33,5 +35,13 @@ public class RequestEntertoSocialNetwork {
 
     public void setAccesstokenofanothersn(String accesstokenofanothersn) {
         this.accesstokenofanothersn = accesstokenofanothersn;
+    }
+
+    public String getJsonuser() {
+        return jsonuser;
+    }
+
+    public void setJsonuser(String jsonuser) {
+        this.jsonuser = jsonuser;
     }
 }
